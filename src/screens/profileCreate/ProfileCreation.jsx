@@ -35,7 +35,7 @@ const ProfileCreation = () => {
   return (
     <div className="flex-1 flex flex-col justify-center items-center text-black gap-5">
       <h1 className="font-semibold text-2xl">Register your account</h1>
-      <form onSubmit={(e) => onSubmit(e)} className="flex flex-col gap-4 mt-10">
+      <form onSubmit={(e) => onSubmit(e)} className="flex flex-col items-center gap-4 mt-10">
         <div>
           <p className="font-semibold text-md">Full Name</p>
           <input
@@ -43,7 +43,7 @@ const ProfileCreation = () => {
             onChange={(e) => dispatch(setFullName(e.target.value))}
             type="text"
             placeholder="Aswin Raaj"
-            className="border-2 bg-blue-50 border-gray-500 rounded-md w-96 px-2 py-1 text-lg"
+            className="border-2 bg-blue-50 border-gray-500 rounded-md w-60 lg:w-96 px-2 py-1 text-lg"
           />
         </div>
         <div>
@@ -53,10 +53,10 @@ const ProfileCreation = () => {
             onChange={(e) => dispatch(setPhoneNumber(e.target.value))}
             type="text"
             placeholder="1234567890"
-            className="border-2 bg-blue-50 border-gray-500 rounded-md w-96 px-2 py-1 text-lg"
+            className="border-2 bg-blue-50 border-gray-500 rounded-md w-60 lg:w-96 px-2 py-1 text-lg"
           />
         </div>
-        <div className="flex gap-5 items-center mt-16">
+        <div className="flex gap-5 items-center mt-16 w-60 lg:w-96">
           <input type="checkbox" className="bg-blue-50"/>
           <label className="text-xs">
             By creating an account, you are agreeing to our{" "}
@@ -66,7 +66,7 @@ const ProfileCreation = () => {
           </label>
         </div>
 
-        <button type="submit" className="rounded-lg bg-blue-500 py-2 mt-2">
+        <button type="submit" className="rounded-lg bg-blue-500 py-2 w-60 lg:w-96 mt-2">
           Create Account
         </button>
       </form>

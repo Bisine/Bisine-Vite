@@ -20,7 +20,7 @@ const LoginSide = () => {
     <div className=' flex-1 flex flex-col justify-center items-center'>
         <h1 className='text-3xl font-semibold text-black'>Get Started</h1>
         <div>
-            <img src={Vector} height={370} width={370}/>
+            <img src={Vector} className='object-contain h-64 lg:h-96'/>
         </div>
         <LoginButton/>
     </div>

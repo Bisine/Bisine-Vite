@@ -4,7 +4,7 @@ import Profile from "./assets/Profile.png";
 
 const InfoSlide = () => {
   return (
-    <div className=" bg-cyan-200 p-5 rounded-2xl flex flex-col max-w-md">
+    <div className=" bg-cyan-200 p-5 rounded-2xl md:flex flex-col hidden md:max-w-sm lg:max-w-md">
       <div className="flex items-center">
         <div>
           <img src={Logo} width={25} height={25} className="drop-shadow-2xl" />
