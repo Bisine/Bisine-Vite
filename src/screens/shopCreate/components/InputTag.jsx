@@ -76,7 +76,7 @@ function TagInput() {
           <input
           type="text"
           placeholder="Add tags..."
-          className=" focus:outline-none focus:ring-0 bg-blue-50 min-w-28 w-full text-md px-2 "
+          className=" focus:outline-none focus:ring-0 bg-blue-50  max-w-full text-md px-2 "
           value={inputValue}
           onChange={handleInputChange}
           onKeyPress={handleInputKeyPress}
