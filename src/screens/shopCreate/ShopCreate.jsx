@@ -31,7 +31,6 @@ const ShopCreate = () => {
   const state = useSelector((e) => e.shop.state);
   const contactNumber = useSelector((e) => e.shop.contactNumber);
   const emailID = useSelector((e) => e.shop.emailID);
-  const socialMediaLink = useSelector((e) => e.shop.socialMediaLink);
 
   const dispatch = useDispatch();
   const [part, setPart] = useState(1);

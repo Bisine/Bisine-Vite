@@ -41,15 +41,15 @@ function TagInput() {
   return (
     <div>
       <div
-        className={`flex border-2 px-1  rounded-md overflow-x-scroll w-60  md:w-72 lg:w-96 py-1 ${
+        className={`flex border-2 px-1  rounded-md   w-60  md:w-72 lg:w-96 py-1 ${
           shopTagsError != "" ? "border-red-500" : "border-gray-500"
         }`}
       >
-        <div className=" flex  gap-1 ">
+        <div className=" flex flex-wrap  gap-1 ">
           {tags.map((tag, index) => (
             <div
               key={index}
-              className="bg-blue-500 text-white px-2 py-1 text-md h-fit rounded-full flex items-center"
+              className="bg-blue-500 text-white px-2 py-1 text-md h-fit rounded-full flex  items-center"
             >
               {tag}
               <button
@@ -73,8 +73,7 @@ function TagInput() {
               </button>
             </div>
           ))}
-        </div>
-        <input
+          <input
           type="text"
           placeholder="Add tags..."
           className=" focus:outline-none focus:ring-0 bg-blue-50 min-w-28 w-full text-md px-2 "
@@ -82,6 +81,8 @@ function TagInput() {
           onChange={handleInputChange}
           onKeyPress={handleInputKeyPress}
         />
+        </div>
+        
       </div>
       <p className="text-red-500 text-xs">{shopTagsError}</p>
     </div>
