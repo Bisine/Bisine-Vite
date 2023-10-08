@@ -1,13 +1,17 @@
 import { useState, useEffect } from "react";
 import Logo from "../Logo.png";
 
-const NavBar = () => {
+const NavBar = ({ isSearchVisible }) => {
   const [isSearchClicked, setIsSearchClicked] = useState(false);
 
   return (
     <nav id="navbar" className="w-full z-50 ">
-      <div className={`${isSearchClicked ? 'flex' : 'hidden'} sm:hidden fixed z-50 px-4 bg-blue-400 w-full py-4 gap-5`}>
-        <button onClick={() => setIsSearchClicked(prev => !(prev))}>
+      <div
+        className={`${
+          isSearchClicked ? "flex" : "hidden"
+        } sm:hidden fixed z-50 px-4 bg-blue-400 w-full py-4 gap-5`}
+      >
+        <button onClick={() => setIsSearchClicked((prev) => !prev)}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -23,7 +27,10 @@ const NavBar = () => {
             />
           </svg>
         </button>
-        <input placeholder="Search Products and Shops" className="rounded bg-blue-50 px-2 py-1 w-full text-black"/>
+        <input
+          placeholder="Search Products and Shops"
+          className="rounded bg-blue-50 px-2 py-1 w-full text-black"
+        />
       </div>
       <div
         className={`px-4  sm:px-8 py-4 ${
@@ -50,7 +57,8 @@ const NavBar = () => {
           <img src={Logo} className="object-fit h-6 ml-2 md:ml-5" />
           <p className="uppercase text-xl font-semibold text-black">Bisine</p>
         </div>
-        <div className="relative hidden sm:block">
+        {
+          isSearchVisible && <div className="relative hidden sm:block">
           <input
             placeholder="Search Products and shops "
             className="bg-white text-black  rounded-lg px-8 py-1 w-60 text-sm lg:text-md lg:w-96"
@@ -72,23 +80,26 @@ const NavBar = () => {
             </svg>
           </div>
         </div>
+        }
         <div className="flex gap-4">
-          <button onClick={() => setIsSearchClicked((prev) => !prev)}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              className="w-6 h-6 text-black sm:hidden"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-              />
-            </svg>
-          </button>
+          {isSearchVisible && (
+            <button onClick={() => setIsSearchClicked((prev) => !prev)}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="w-6 h-6 text-black sm:hidden"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+                />
+              </svg>
+            </button>
+          )}
           <button>
             <svg
               xmlns="http://www.w3.org/2000/svg"

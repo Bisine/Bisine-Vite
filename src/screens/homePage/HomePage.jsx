@@ -14,7 +14,7 @@ function HomePage() {
   return (
     <>
       <section className="min-h-screen bg-blue-50">
-        <NavBar />
+        <NavBar isSearchVisible={true} />
         <div className="h-full px-8 py-20">
           <h1 className="font-semibold text-black text-2xl">Recommendations</h1>
           <div className="py-2 text-black overflow-x-auto whitespace-nowrap">

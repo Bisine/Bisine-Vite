@@ -13,6 +13,7 @@ export const user = createSlice({
     reducers: {
         setEmail : (state, action) => {
             state.email = action.payload
+            
         },
         setProfileUrl : (state, action) => {
             state.profileUrl = action.payload
@@ -23,14 +24,8 @@ export const user = createSlice({
         setPhoneNumber : (state, action) => {
             state.phoneNumber = action.payload
         },
-        setShippingAddress : (state, action) => {
-            state.shippingAddress = action.payload
-        },
-        setGoogleMapLink :(state, action) => {
-            state.googleMapLink = action.payload
-        }
     }
 })
 
-export const {setEmail, setProfileUrl,setFullName, setPhoneNumber, setShippingAddress, setGoogleMapLink} = user.actions
+export const {setEmail, setProfileUrl,setFullName, setPhoneNumber} = user.actions
 export default user.reducer
