@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setShopTags } from "../../../redux/features/shop";
 
-function TagInput() {
+function TagInput({ bgWhite }) {
   const [tags, setTags] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const dispatch = useDispatch();
@@ -17,6 +17,7 @@ function TagInput() {
   };
 
   const handleInputKeyPress = (e) => {
+    
     if (tags.includes(inputValue.trim())) {
       setInputValue("");
     }
@@ -39,11 +40,11 @@ function TagInput() {
   };
 
   return (
-    <div>
+    <div className="">
       <div
-        className={`flex border-2 px-1  rounded-md   w-60  md:w-72 lg:w-96 py-1 ${
-          shopTagsError != "" ? "border-red-500" : "border-gray-500"
-        }`}
+        className={`flex border-2 px-1  rounded-md  ${
+          bgWhite ? "w-full " : " w-60  md:w-72 lg:w-96"
+        } py-1 ${shopTagsError != "" ? "border-red-500" : "border-gray-500"}`}
       >
         <div className=" flex flex-wrap  gap-1 ">
           {tags.map((tag, index) => (
@@ -74,15 +75,16 @@ function TagInput() {
             </div>
           ))}
           <input
-          type="text"
-          placeholder="Add tags..."
-          className=" focus:outline-none focus:ring-0 bg-blue-50  max-w-full text-md px-2 "
-          value={inputValue}
-          onChange={handleInputChange}
-          onKeyPress={handleInputKeyPress}
-        />
+            type="text"
+            placeholder="Add tags..."
+            className={` focus:outline-none focus:ring-0 ${
+              bgWhite ? "bg-white" : "bg-blue-50"
+            }  max-w-full text-md px-2`}
+            value={inputValue}
+            onChange={handleInputChange}
+            onKeyPress={handleInputKeyPress}
+          />
         </div>
-        
       </div>
       <p className="text-red-500 text-xs">{shopTagsError}</p>
     </div>

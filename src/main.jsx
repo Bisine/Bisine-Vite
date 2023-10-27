@@ -9,6 +9,7 @@ import ProfileCreatePage from "./screens/profileCreate/page.jsx";
 import HomePage from "./screens/homePage/HomePage";
 import ShopCreate from "./screens/shopCreate/ShopCreate";
 import CartPage from "./screens/cartPage/CartPage";
+import ProductAdditionScreen from "./screens/addProduct/AddProduct";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -20,6 +21,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/profileCreate" element={<ProfileCreatePage/>}/>
           <Route path="/shopCreate" element={<ShopCreate/>}/>
           <Route path="/cart" element={<CartPage/>}/>
+          <Route path="/addProduct" element={<ProductAdditionScreen/>}/>
         </Routes>
       </BrowserRouter>
     </Provider>

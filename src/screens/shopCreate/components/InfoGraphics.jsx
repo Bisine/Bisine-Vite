@@ -1,8 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { setBanner, setLogo } from "../../../redux/features/shop";
 
 const InfoGraphics = ({ partNo }) => {
+  const dispatch = useDispatch();
   const [profileImage, setProfileImage] = useState(null);
   const [shopBanner, setShopBanner] = useState(null);
+
+  useEffect(()=>{
+    dispatch(setLogo(profileImage))
+  },[profileImage])
+  useEffect(()=>{
+    dispatch(setBanner(shopBanner))
+  },[shopBanner])
 
   const handleImageChange = (e , stateFunc) => {
     const selectedImage = e.target.files[0];

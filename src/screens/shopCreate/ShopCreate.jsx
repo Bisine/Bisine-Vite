@@ -19,6 +19,7 @@ import {
   setShopTagsError,
   setStateError,
 } from "../../redux/features/shopError";
+import axiosInstance from "../../axios";
 
 const ShopCreate = () => {
   const shopName = useSelector((e) => e.shop.shopName);
@@ -27,10 +28,14 @@ const ShopCreate = () => {
   const pincode = useSelector((e) => e.shop.pincode);
   const flat = useSelector((e) => e.shop.flat);
   const area = useSelector((e) => e.shop.area);
+  const landmark = useSelector((e) => e.shop.landmark);
   const city = useSelector((e) => e.shop.city);
   const state = useSelector((e) => e.shop.state);
   const contactNumber = useSelector((e) => e.shop.contactNumber);
   const emailID = useSelector((e) => e.shop.emailID);
+  const socialMediaLink = useSelector((e) => e.shop.socialMediaLink);
+  const logo = useSelector((e) => e.shop.logo);
+  const banner = useSelector((e) => e.shop.banner);
 
   const dispatch = useDispatch();
   const [part, setPart] = useState(1);
@@ -79,7 +84,7 @@ const ShopCreate = () => {
         incrementPart();
       }
     } else if (part == 3) {
-      incrementPart();
+      incrementPart(shopName);
     }
   };
 
@@ -92,6 +97,28 @@ const ShopCreate = () => {
       dispatch(setEmailIDError("Kindly enter your business email correctly"));
     } else {
       //Create shop
+      const location = [pincode, flat, area, landmark];
+      let form_data = new FormData();
+      form_data.append("name", shopName);
+      form_data.append("description", shopDescription);
+      form_data.append("tags", shopTags.join(","));
+      form_data.append("location", location.join(";"));
+      form_data.append("city", city);
+      form_data.append("state", state);
+      form_data.append("logo", logo);
+      form_data.append("contact_number", "+91" + contactNumber);
+      form_data.append("email_id", emailID);
+      form_data.append("social_link", socialMediaLink);
+      form_data.append("banner", banner);
+      axiosInstance.post("shop/create/", form_data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }).then((res) => {
+        console.log(res)
+      }).catch((err) => {
+        console.log(err)
+      });
     }
   };
 

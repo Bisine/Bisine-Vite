@@ -15,6 +15,8 @@ export const shop = createSlice({
         contactNumber:'',
         emailID:'',
         socialMediaLink:'',
+        logo:'',
+        banner: ''
     },
     reducers: {
         setShopName : (state, action) => {
@@ -52,10 +54,16 @@ export const shop = createSlice({
         },
         setSocialMediaLink: (state,action) => {
             state.socialMediaLink = action.payload
+        },
+        setLogo : (state,action) => {
+            state.logo = action.payload
+        },
+        setBanner: (state, action) => {
+            state.banner = action.payload
         }
     }
 })
 
-export const {setShopName, setShopDescription,setShopTags,setPinCode,setFlat, setArea,setLandmark,setCity,setState, setContactNumber, setEmailID, setSocialMediaLink} = shop.actions
+export const {setShopName, setShopDescription,setShopTags,setPinCode,setFlat, setArea,setLandmark,setCity,setState, setContactNumber, setEmailID, setSocialMediaLink, setBanner, setLogo} = shop.actions
 
 export default shop.reducer
