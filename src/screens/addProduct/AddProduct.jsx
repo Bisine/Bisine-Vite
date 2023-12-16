@@ -1,23 +1,31 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../../CommonComponets/NavBar";
 import TagInput from "../shopCreate/components/InputTag";
-import { setDescription, setImages, setName, setProductTags, setProductVariants, setQuantity, setUnit, setWeight } from "../../redux/features/product";
+import {
+  setDescription,
+  setImages,
+  setName,
+  setProductTags,
+  setProductVariants,
+  setQuantity,
+  setUnit,
+  setWeight,
+} from "../../redux/features/product";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-
 
 const ProductAdditionScreen = () => {
   const [showDescriptionTooltip, setDescriptionShowTooltip] = useState(false);
   const [showTagToolTip, setShowTagToolTip] = useState(false);
   // State for input values
-  const productName = useSelector(e => e.product.name);
-  const productDescription = useSelector(e => e.product.description)
-  const productTags = useSelector(e => e.product.productTags)
-  const productImages = useSelector(e => e.product.images)
-  const productVariants = useSelector(e => e.product.variant)
-  const weight = useSelector(e => e.product.weight)
-  const weightUnit = useSelector(e=>e.product.unit)
-  const quantityInStock = useSelector(e =>e.product.quantity)
+  const productName = useSelector((e) => e.product.name);
+  const productDescription = useSelector((e) => e.product.description);
+  const productTags = useSelector((e) => e.product.productTags);
+  const productImages = useSelector((e) => e.product.images);
+  const productVariants = useSelector((e) => e.product.variants);
+  const weight = useSelector((e) => e.product.weight);
+  const weightUnit = useSelector((e) => e.product.unit);
+  const quantityInStock = useSelector((e) => e.product.quantity);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -32,14 +40,19 @@ const ProductAdditionScreen = () => {
         file: files[i],
       });
     }
-    dispatch(setImages(updatedImages))
+    dispatch(setImages(updatedImages));
   };
   const removeImage = (id) => {
     const updatedImages = productImages.filter((image) => image.id !== id);
-    dispatch(setImages(updatedImages))
+    dispatch(setImages(updatedImages));
   };
 
   // Function to handle changes in variants
+  // const handleVariantChange = (index, field, value) => {
+  //   const updatedVariants = [...productVariants];
+  //   updatedVariants[index][field] = value;
+  //   dispatch(setProductVariants(updatedVariants));
+  // };
   const handleVariantChange = (index, field, value) => {
     const updatedVariants = [...productVariants];
     updatedVariants[index] = {
@@ -62,19 +75,18 @@ const ProductAdditionScreen = () => {
 
   const submitProductData = () => {
     const data = {
-      shop_id : 1,
-      product_name : productName,
-      product_description : productDescription,
-      product_images : productImages,
-      product_tags : productTags,
-      product_variants : productVariants,
+      shop_id: 1,
+      product_name: productName,
+      product_description: productDescription,
+      product_images: productImages,
+      product_tags: productTags,
+      product_variants: productVariants,
       product_weight: weight,
-      product_weight_unit : weightUnit,
-      product_quantity_in_stock : quantityInStock
-    }
-    console.log(data)
-  }
-  
+      product_weight_unit: weightUnit,
+      product_quantity_in_stock: quantityInStock,
+    };
+    console.log(data);
+  };
 
   return (
     <div className="bg-blue-50 min-h-screen ">
@@ -215,39 +227,128 @@ const ProductAdditionScreen = () => {
                 </label>
               </div>
             </div>
-            <div className="grid gap-4">
+            <div className="">
               <div className="bg-white rounded-lg text-black shadow-md p-4">
                 {/* Variants and Prices */}
                 <label className="text-black font-medium mb-2">
                   Variants and Prices:
                 </label>
                 {productVariants.map((variant, index) => (
-                  <div key={index} className="flex items-center mb-3 p-2 bg-gray-200 rounded gap-2 sm:gap-0 flex-col sm:flex-row">
-                  <input
-                    type="text"
-                    placeholder={`Variant ${index + 1}`}
-                    className="w-full  sm:w-1/2 border-2 border-gray-500 bg-white rounded-md px-3 py-2 mr-2"
-                    value={variant.name}
-                    onChange={(e) => handleVariantChange(index, "name", e.target.value)}
-                  />
-                  <div className="flex w-full overflow-hidden items-center flex-1 border-2 border-gray-500 mr-2 bg-white rounded-md">
-                    <div className="mr-2 h-full py-2 px-2 bg-gray-300">₹</div>
-                    <input
-                      type="number"
-                      placeholder="Price"
-                      className="border-none focus:outline-none active:border-none px-3 py-2 w-full"
-                      value={variant.price}
-                      onChange={(e) => handleVariantChange(index, "price", e.target.value)}
-                    />
-                  </div>
-                  <button
-                    onClick={() => removeVariant(index)}
-                    className="bg-red-500 w-full sm:w-auto  text-white rounded-md px-3 py-1"
+                  <div
+                    key={index}
+                    className=" items-center mb-3 p-2 bg-gray-200 rounded gap-2 sm:gap-0 "
                   >
-                    Remove
-                  </button>
-                </div>
-
+                    <div className="flex gap-2">
+                      <div>
+                        <div className="mb-0">
+                          <label className="text-gray-700 pl-2 text-sm font-medium">
+                            {" "}
+                            Product Name{" "}
+                          </label>
+                        </div>
+                        <input
+                          type="text"
+                          placeholder={`Variant ${index + 1}`}
+                          className="w-full border-2 border-gray-500 bg-white rounded-md px-3 py-2 mr-2"
+                          value={variant.name}
+                          onChange={(e) =>
+                            handleVariantChange(index, "name", e.target.value)
+                          }
+                        />
+                      </div>
+                      <div>
+                        <div className="mb-0">
+                          <label className="text-gray-700 pl-2 text-sm font-medium">
+                            {" "}
+                            Product Prize{" "}
+                          </label>
+                        </div>
+                        <div className="flex w-full overflow-hidden items-center flex-1 border-2 border-gray-500 mr-2 bg-white rounded-md">
+                          <div className="mr-2 h-full py-2 px-2 bg-gray-300">
+                            ₹
+                          </div>
+                          <input
+                            type="number"
+                            placeholder="Price"
+                            className="border-none focus:outline-none active:border-none px-3 py-2 w-full"
+                            value={variant.price}
+                            onChange={(e) =>
+                              handleVariantChange(
+                                index,
+                                "price",
+                                e.target.value
+                              )
+                            }
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="mb-0">
+                        <label className="text-gray-700 pl-2 text-sm font-medium">
+                          Quantity in stock
+                        </label>
+                      </div>
+                      <input
+                        type="number"
+                        placeholder="Quantity in Stock"
+                        className="w-full border-2 border-gray-500 bg-white rounded-md px-3 py-2"
+                        value={variant.quantityInStock}
+                        onChange={(e) =>
+                          handleVariantChange(
+                            index,
+                            "quantityInStock",
+                            e.target.value
+                          )
+                        }
+                      />
+                    </div>
+                    <div className="flex gap-2 w-full">
+                      <div className="w-full">
+                        <div className="mb-0">
+                          <label className="text-gray-700 pl-2 text-sm font-medium">
+                            Weight of the package
+                          </label>
+                        </div>
+                        <input
+                          type="number"
+                          placeholder="Weight"
+                          className="w-full border-2 border-gray-500 bg-white rounded-md px-3 py-2"
+                          value={variant.weight}
+                          onChange={(e) =>
+                            handleVariantChange(index, "weight", e.target.value)
+                          }
+                        />
+                      </div>
+                      <div className="w-full">
+                        <div className="mb-0">
+                          <label className="text-gray-700 pl-2 text-sm font-medium">
+                            Weight Unit
+                          </label>
+                        </div>
+                        <select
+                          className="border-2 border-gray-500 bg-white rounded-md px-3 py-2"
+                          value={variant.weightUnit}
+                          onChange={(e) =>
+                            handleVariantChange(
+                              index,
+                              "weightUnit",
+                              e.target.value
+                            )
+                          }
+                        >
+                          <option value="kg">kg</option>
+                          <option value="g">g</option>
+                        </select>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => removeVariant(index)}
+                      className="bg-red-500 text-white rounded-md w-full px-3 py-1  mt-2"
+                    >
+                      Remove
+                    </button>
+                  </div>
                 ))}
                 <button
                   onClick={addVariant}
@@ -256,46 +357,18 @@ const ProductAdditionScreen = () => {
                   Add Variant
                 </button>
               </div>
-              <div className="bg-white rounded-lg text-black shadow-md p-4">
-                {/* Weight and Quantity */}
-                <label className="text-black font-medium">Weight :</label>
-                <div className="grid grid-cols-2 gap-6">
-                  <input
-                    type="number"
-                    placeholder="Weight"
-                    className="w-full border-2 border-gray-500 bg-white rounded-md px-3 py-2"
-                    value={weight}
-                    onChange={(e) => dispatch(setWeight(e.target.value))}
-                  />
-                  <select
-                    className="w-full border-2 border-gray-500 bg-white rounded-md px-3 py-2"
-                    value={weightUnit}
-                    onChange={(e) => dispatch(setUnit(e.target.value))}
-                  >
-                    <option value="kg">kg</option>
-                    <option value="g">g</option>
-                  </select>
-                </div>
-              </div>
-              <div className="bg-white rounded-lg shadow-md p-4">
-                {/* Quantity in Stock */}
-                <label className="text-black font-medium">
-                  Quantity in Stock:
-                </label>
-                <input
-                  type="number"
-                  placeholder="Quantity in Stock"
-                  className="w-full border-2 border-gray-500 bg-white rounded-md px-3 py-2"
-                  value={quantityInStock}
-                  onChange={(e) => dispatch(setQuantity(e.target.value))}
-                />
-              </div>
-              {/* Submit Button */}
-              <div className=" flex flex-col max-h-12 md: gap-10 md:flex-row">
-                <button onClick={() => submitProductData()} className="bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600 w-full   ">
-                  Add Product
+              <div className="mt-2 bg-white rounded-lg text-black shadow-md p-4">
+                <h1 className="font-bold">Submit Products</h1>
+                <button
+                  onClick={() => navigate(-1)}
+                  className="bg-blue-500 mt-2 hover:bg-blue-700 text-white rounded-md px-4 py-2  w-full   "
+                >
+                  Submit
                 </button>
-                <button onClick={() => navigate(-1)} className="bg-red-500 text-white rounded-md px-4 py-2  w-full   ">
+                <button
+                  onClick={() => navigate(-1)}
+                  className="bg-red-500 mt-2 text-white rounded-md px-4 py-2  w-full   "
+                >
                   Cancel
                 </button>
               </div>
