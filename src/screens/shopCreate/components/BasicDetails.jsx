@@ -2,6 +2,7 @@ import React from "react";
 import TagInput from "./InputTag";
 import { useDispatch, useSelector } from "react-redux";
 import { setShopDescription, setShopName } from "../../../redux/features/shop";
+import { setShopTags } from "../../../redux/features/shop";
 
 const BasicDetails = ({ partNo }) => {
   const dispatch = useDispatch()
@@ -10,6 +11,8 @@ const BasicDetails = ({ partNo }) => {
 
   const shopNameError = useSelector(e => e.shopError.shopNameError)
   const shopDescriptionError = useSelector(e=> e.shopError.shopDescriptionError)
+
+  
 
 
   return (
@@ -42,7 +45,7 @@ const BasicDetails = ({ partNo }) => {
       </div>
       <div>
       <label className="text-md font-semibold block">Shop Tags</label>
-        <TagInput/>
+        <TagInput setData={setShopTags}/>
       </div>
     </div>
   );

@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setShopTags } from "../../../redux/features/shop";
 
-function TagInput({ bgWhite }) {
+
+function TagInput({ bgWhite , setData}) {
   const [tags, setTags] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const dispatch = useDispatch();
   const shopTagsError = useSelector((e) => e.shopError.shopTagsError);
 
   useEffect(() => {
-    dispatch(setShopTags(tags));
+    dispatch(setData(tags));
   }, [tags]);
 
   const handleInputChange = (e) => {

@@ -10,8 +10,10 @@ import HomePage from "./screens/homePage/HomePage";
 import ShopCreate from "./screens/shopCreate/ShopCreate";
 import CartPage from "./screens/cartPage/CartPage";
 import ProductAdditionScreen from "./screens/addProduct/AddProduct";
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 ReactDOM.createRoot(document.getElementById("root")).render(
+  < GoogleOAuthProvider clientId="774961232823-b6fmrl6p9tcbhgk19fuv7a6ftbbegcm6.apps.googleusercontent.com">
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
@@ -26,4 +28,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       </BrowserRouter>
     </Provider>
   </React.StrictMode>
+  </GoogleOAuthProvider>
 );

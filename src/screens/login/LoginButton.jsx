@@ -1,11 +1,14 @@
 
 import React from "react";
 import Google from "./google.png";
-import { GoogleLogin , GoogleLogout} from "react-google-login";
+//import { GoogleLogin , GoogleLogout} from "react-google-login";
 import { useDispatch, useSelector } from "react-redux";
 import { setEmail, setProfileUrl } from "../../redux/features/user";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../axios";
+import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
+import { googleLogout } from "@react-oauth/google";
 
 const clientId =
   "774961232823-b6fmrl6p9tcbhgk19fuv7a6ftbbegcm6.apps.googleusercontent.com";
@@ -16,12 +19,12 @@ const LoginButton = () => {
     const email = useSelector(e => e.user.email);
 
   const onSuccess = (re) => {
-    console.log("Login Success", re.profileObj.email);
-    localStorage.setItem('email',re.profileObj.email);
-    dispatch(setEmail(re.profileObj.email))
-    dispatch(setProfileUrl(re.profileObj.imageUrl))
+    console.log("Login Success", re.email);
+    localStorage.setItem('email',re.email);
+    dispatch(setEmail(re.email))
+    dispatch(setProfileUrl(re.picture))
     axiosInstance.post('user/check/',{
-      email: re.profileObj.email
+      email: re.email
     }).then(
      (res) =>{
       console.log(res.data.check)
@@ -29,7 +32,7 @@ const LoginButton = () => {
           //If user is already created account
           axiosInstance.post(
             'user/token/',{
-              email:  re.profileObj.email
+              email:  re.email
             }
           ).then(res => {
             if (res.status == 200){
@@ -53,25 +56,23 @@ const LoginButton = () => {
   const onFailure = (res) => {
     console.log("Login Failed", res);
   };
+
+  const login  = useGoogleLogin({
+    onSuccess: (r) =>  console.log(r),
+    onError : onFailure
+  })
+
   return (
     <div id="signInButton" className="text-black">
-      <GoogleLogin
-        render={(r) => 
-          <button onClick={r.onClick} className="flex px-10 py-3 gap-2 bg-gray-300 rounded-lg text-black font-medium items-center transition ease-in-out duration-300 hover:bg-sky-500">
+      {/* <button onClick={() => login()} className="flex px-10 py-3 gap-2 bg-gray-300 rounded-lg text-black font-medium items-center transition ease-in-out duration-300 hover:bg-sky-500">
             <div>
               <img src={Google} height={25} 
               width={25}className="object-contain"/>
             </div>
             <p>Continue with Google</p>
-          </button>
-        }
-        clientId={clientId}
-        buttonText="Login"
-        onSuccess={onSuccess}
-        onFailure={onFailure}
-        cookiePolicy="single_host_origin"
-        isSignedIn={true}
-      />
+          </button> */}
+      <GoogleLogin  onSuccess={(r) =>onSuccess(jwtDecode(r.credential))} theme="filled_blue"/>
+      <button onClick={() => googleLogout()}>Logout</button>
       {/* <p>{email}</p>
       <GoogleLogout
                 clientId={clientId}
