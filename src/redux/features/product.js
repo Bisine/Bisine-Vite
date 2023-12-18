@@ -8,7 +8,7 @@ export const product = createSlice({
     productTags: [],
     images: [],
     variants: [
-      { name: "", price: "", quantityInStock: 0, weight: 0, weightUnit: "kg" },
+      { name: "", price: "", quantityInStock: null, weight: null, weightUnit: "kg" },
     ],
     weight: 0,
     unit: "",

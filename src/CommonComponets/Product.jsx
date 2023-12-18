@@ -21,7 +21,7 @@ const Product = () => {
           alt={product.title}
           className="w-full h-auto "
         />
-        <p className="absolute bottom-2 right-2 bg-gray-700 text-sm px-1 py-0.5 rounded-md">₹ {product.price}</p>
+        <p className="absolute bottom-2 text-white right-2 bg-gray-700 text-sm px-1 py-0.5 rounded-md">₹ {product.price}</p>
       </div>
       <div className="px-2 pt-2 pb-1 flex items-center">
         <img

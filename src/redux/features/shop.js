@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const shop = createSlice({
+    //Address should be given as pincode,flat,area,landmark as csv to the backend
     name: 'shop',
     initialState: {
         shopName: '',
@@ -61,6 +62,7 @@ export const shop = createSlice({
         setBanner: (state, action) => {
             state.banner = action.payload
         }
+        
     }
 })
 
