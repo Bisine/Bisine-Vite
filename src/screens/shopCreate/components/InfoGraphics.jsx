@@ -1,17 +1,39 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setBanner, setLogo } from "../../../redux/features/shop";
+import axios from "axios";
 
 const InfoGraphics = ({ partNo }) => {
+  //Secret keys for Cloudinary
+  const preset_key = "bisineimages" ;
+  const cloudname = "ddkpclbs2";
+
+
   const dispatch = useDispatch();
   const [profileImage, setProfileImage] = useState(null);
   const [shopBanner, setShopBanner] = useState(null);
 
+  //State variables for loading state
+  const [isLogoUploaded, setIsLogoUploaded] = useState(null)
+  const [isBannerUploaded, setIsBannerUploaded] = useState(null)
+
+  const uploadImage = (stateFunc, file, loadStateFunc) => {
+    loadStateFunc(false)
+    const formData = new FormData()
+    formData.append("file",file)
+    formData.append("upload_preset",preset_key)
+    axios.post(`https://api.cloudinary.com/v1_1/${cloudname}/image/upload`,formData)
+    .then(res => dispatch(stateFunc(res.data.secure_url))).then(r => loadStateFunc(true))
+    .catch(err => console.log(err))
+  }
+
   useEffect(()=>{
-    dispatch(setLogo(profileImage))
+    //dispatch(setLogo(profileImage))
+    uploadImage(setLogo,profileImage,setIsLogoUploaded)
   },[profileImage])
   useEffect(()=>{
-    dispatch(setBanner(shopBanner))
+    //dispatch(setBanner(shopBanner))
+    uploadImage(setBanner,shopBanner,setIsBannerUploaded)
   },[shopBanner])
 
   const handleImageChange = (e , stateFunc) => {
@@ -44,11 +66,14 @@ const InfoGraphics = ({ partNo }) => {
         </p>
         <div className="flex w-full justify-center items-center flex-col text-sm mt-2">
           {profileImage ? (
+            <div className="flex items-center gap-2">
             <img
               src={profileImage}
               alt="Selected Avatar"
               className="w-20 h-20 rounded-full"
             />
+            { isLogoUploaded ? <p>Successfully Uploaded</p> : <p>Uploading...</p>}
+            </div>
           ) : (
             <div className="w-20 h-20 rounded-full bg-gray-200 flex justify-center items-center">
               <svg
@@ -84,11 +109,14 @@ const InfoGraphics = ({ partNo }) => {
         </p>
         <div className="flex w-full justify-center items-center flex-col text-sm mt-2">
         {shopBanner ? (
+          <div className="flex items-center gap-2">
             <img
               src={shopBanner}
               alt="Selected Avatar"
               className="w-20 h-10 "
             />
+           { isLogoUploaded ? <p>Successfully Uploaded</p> : <p>Uploading...</p>}
+            </div>
           ) : (
             <div className="w-48 h-16  bg-gray-200 flex justify-center items-center">
               <svg
