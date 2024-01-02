@@ -1,7 +1,8 @@
 import React from 'react'
 import userDefault from "../assests/userIcon.png"
+import { Rating } from 'react-simple-star-rating'
 
-function ReviewCard({userImage}) {
+function ReviewCard({userImage, name, date, description, rating, option}) {
     const userPhoto = userImage || userDefault
 
     return (
@@ -19,13 +20,16 @@ function ReviewCard({userImage}) {
                         src={userPhoto}
                     />
                     <div>
-                        <h3 className="font-bold text-lg">John Doe</h3>
-                        <span className="text-gray-500">January 1, 2023</span>
+                        <h3 className="font-bold text-lg">{name}</h3>
+                        <span className="text-gray-500">{date}</span>
+                        <span className='text-gray-500'>Option: {option}</span>
                     </div>
                 </div>
+                <div>
+                    <Rating readonly showTooltip initialValue={rating} />
+                </div>
                 <p className="text-gray-500">
-                This product is amazing! I've been using it for a month now and it has
-                exceeded my expectations.
+                    {description}
                 </p>
             </div>
         </div>
