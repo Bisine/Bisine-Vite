@@ -1,10 +1,16 @@
-import React from 'react'
+import React, {useState} from 'react'
 import Navbar from "../../CommonComponets/NavBar"
 import AddReviewCard from './components/AddReviewCard'
 import ProductCard from './components/ProductCard'
 import ReviewCard from './components/ReviewCard'
 
 function ProductPage() {
+    const [reviews, setReviews] = useState([]);
+
+    const addReview = (newReview) => {
+        setReviews([...reviews, newReview]);
+    };
+
     const product = {
         "shop_id": 1,
         "product_name": "Spider Man T-Shirt",
@@ -42,8 +48,16 @@ function ProductPage() {
             <ProductCard product={product}/>
             <div className="max-w-6xl px-4 mx-auto py-6">
                 <h2 className="font-bold text-2xl md:text-3xl mb-6">Customer Reviews</h2>
-                <ReviewCard />
-                <AddReviewCard />
+                {reviews.map((review, index) => (
+                    <ReviewCard
+                        key={index}
+                        name={review.name}
+                        date={review.date} 
+                        description={review.description}
+                        rating={review.rating}
+                    />
+                ))}
+                <AddReviewCard addReview={addReview} />
             </div>
         </>
     )

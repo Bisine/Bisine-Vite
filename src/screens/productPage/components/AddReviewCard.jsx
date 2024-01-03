@@ -1,11 +1,69 @@
-import React from 'react'
+import React, { useState } from 'react';
+import { Rating } from 'react-simple-star-rating';
+import ReviewCard from './ReviewCard';
 
-function AddReviewCard() {
+function AddReviewCard({ addReview }) {
+    const [rating, setRating] = useState(0);
+    const [name, setName] = useState('');
+    const [review, setReview] = useState('');
+    const [selectedOption, setSelectedOption] = useState('Option 1');
+
+    const handleRating = (rate) => {
+        setRating(rate);
+    };
+
+    const createReviewCard = (e) => {
+        e.preventDefault();
+        if (name && review && rating && selectedOption) {
+            const newReview = {
+                name: name,
+                rating: rating,
+                description: review,
+                option: selectedOption,
+                date: getCurrentDateFormatted(),
+            };
+            addReview(newReview);
+            setName('');
+            setReview('');
+            setRating(0);
+            setSelectedOption('Option 1');
+        }
+    };
+
+    function getCurrentDateFormatted() {
+            const months = [
+            'January', 'February', 'March', 'April', 'May', 'June', 'July',
+            'August', 'September', 'October', 'November', 'December'
+            ];
+        
+            const currentDate = new Date();
+            const day = currentDate.getDate();
+            const month = months[currentDate.getMonth()];
+            const year = currentDate.getFullYear();
+        
+            const daySuffix = getDaySuffix(day);
+        
+            return `${month} ${day}${daySuffix}, ${year}`;
+        }
+        
+        function getDaySuffix(day) {
+            if (day >= 11 && day <= 13) {
+                return 'th';
+            }
+                switch (day % 10) {
+                case 1:
+                    return 'st';
+                case 2:
+                    return 'nd';
+                case 3:
+                    return 'rd';
+                default:
+                    return 'th';
+            }
+    }
+
     return (
-        <div
-        className="rounded-lg border bg-card text-card-foreground shadow-sm"
-        data-v0-t="card"
-        >
+        <div className="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
             <div className="p-4 flex flex-col gap-4">
                 <h2 className="font-bold text-2xl md:text-3xl mb-6">Add Your Review</h2>
                 <div className="flex flex-col gap-4">
@@ -14,16 +72,23 @@ function AddReviewCard() {
                         className="p-2 border rounded"
                         placeholder="Your Name"
                         type="text"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
                     />
                     <textarea
                         aria-label="Your Review"
                         className="p-2 border rounded"
                         placeholder="Your Review"
                         rows={5}
-                        defaultValue={""}
+                        value={review}
+                        onChange={(e) => setReview(e.target.value)}
                     />
                     <div className="relative inline-flex w-[8rem]">
-                        <select className="block appearance-none  bg-white border border-gray-300 rounded-md py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-blue-500 cursor-pointer">
+                        <select
+                            className="block appearance-none bg-white border border-gray-300 rounded-md py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-blue-500 cursor-pointer"
+                            value={selectedOption}
+                            onChange={(e) => setSelectedOption(e.target.value)}
+                        >
                             <option className='bg-gray-200 hover:bg-gray-300'>Option 1</option>
                             <option className='px-4 py-2 text-gray-700 hover:bg-blue-500 hover:text-white'>Option 2</option>
                             <option className='px-4 py-2 text-gray-700 hover:bg-blue-500 hover:text-white'>Option 3</option>
@@ -36,13 +101,36 @@ function AddReviewCard() {
                             </svg>
                         </div>
                     </div>
-                    <button className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-primary/90 h-10 px-4 py-2 bg-blue-500 text-white">
+                    <div>
+                        <Rating
+                            showTooltip
+                            allowFraction
+                            tooltipArray={[
+                                'Terrible',
+                                'Terrible+',
+                                'Bad',
+                                'Bad+',
+                                'Average',
+                                'Average+',
+                                'Great',
+                                'Great+',
+                                'Awesome',
+                                'Awesome+'
+                            ]}
+                            onClick={handleRating}
+                            initialValue={rating}
+                        />
+                    </div>
+                    <button
+                        className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-primary/90 h-10 px-4 py-2 bg-blue-500 text-white"
+                        onClick={createReviewCard}
+                    >
                         Submit Review
                     </button>
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
-export default AddReviewCard
+export default AddReviewCard;
