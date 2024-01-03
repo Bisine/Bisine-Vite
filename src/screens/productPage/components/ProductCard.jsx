@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ProductPlaceholderImage from '../assests/placeholder-product.svg';
 import ShopPlaceholderImage from '../assests/placeholder-shop.svg';
 
-
 function ProductCard({ product }) {
-
+    
     const {
         shopImage,
         product_name: productName,
@@ -21,18 +20,29 @@ function ProductCard({ product }) {
         "rose",
         "indigo",
         "pink",
-    ]
+    ];
 
     const defaultVariant = { name: 'Medium', price: '300' };
 
-    function isValidURL(string) {
-        try {
-            new URL(string);
-            return true;
-        } catch (_) {
-            return false;
+    const [mainImage, setMainImage] = useState(ProductPlaceholderImage);
+    const [smallImages, setSmallImages] = useState([]);
+
+    useEffect(() => {
+        if (product_images && product_images.length > 0) {
+            const main = { url: product_images[0], isMain: true };
+            const remaining = product_images.slice(1, 4).map(img => ({ url: img, isMain: false }));
+            setSmallImages([main, ...remaining]);
         }
-    }
+    }, [product_images]);
+
+    const handleImageClick = (url, index) => {
+        const newImages = [...smallImages];
+        const tempMainImage = newImages[0];
+        newImages[0] = { url, isMain: true };
+        newImages[index] = tempMainImage;
+        setMainImage(url);
+        setSmallImages(newImages);
+    };
 
     const [selectedVariant, setSelectedVariant] = useState(product_variants ? product_variants[1] : defaultVariant); 
 
@@ -46,68 +56,44 @@ function ProductCard({ product }) {
 
     return (
         <div className="grid md:grid-cols-2 gap-6 lg:gap-12 items-start max-w-6xl px-4 mx-auto py-6 pt-20">
-            <div className="relative w-full aspect-[1/1]">
-                <div className="absolute inset-0 flex items-center justify-center">
-                    {product_images && product_images.length > 0 && isValidURL(product_images[0]) ? (
-                        <img
-                            alt={`Product Image - ${productName}`}
-                            className="w-full h-full object-cover rounded-lg"
-                            height={500}
-                            src={product_images[0]}
-                            style={{ aspectRatio: "1000/500", objectFit: "cover" }}
-                            width={1000}
-                        />
-                    ) : (
-                        <img
-                            alt={`Product Image - ${productName}`}
-                            className="w-full h-full object-cover rounded-lg"
-                            height={500}
-                            src={ProductPlaceholderImage}
-                            style={{ aspectRatio: "1000/500", objectFit: "cover" }}
-                            width={1000}
-                        />
-                    )}
-                </div>
-                <div className="absolute bottom-0 left-0 flex items-center gap-2 p-4">
-                    {product_images && product_images.length > 1 ? (
-                        product_images.slice(1, 4).map((url, index) => (
-                            isValidURL(url) ? (
-                                <img
-                                    key={index}
-                                    alt={`Product Image - ${productName}`}
-                                    className="w-16 h-16 object-cover rounded-lg"
-                                    height={100}
-                                    src={url}
-                                    style={{ aspectRatio: "100/100", objectFit: "cover" }}
-                                    width={100}
-                                />
-                            ) : (
-                                <img
-                                    key={index}
-                                    alt={`Product Image - ${productName}`}
-                                    className="w-16 h-16 object-cover rounded-lg"
-                                    height={100}
-                                    src={ProductPlaceholderImage}
-                                    style={{ aspectRatio: "100/100", objectFit: "cover" }}
-                                    width={100}
-                                />
-                            )
-                        ))
-                    ) : null}
-                </div>
+        <div className="relative w-full aspect-[1/1]">
+            <div className="absolute inset-0 flex items-center justify-center">
+                    <img
+                        alt={`Product Image - ${productName}`}
+                        className="w-full h-full object-cover rounded-lg"
+                        height={500}
+                        src={mainImage}
+                        style={{ aspectRatio: '1000/500', objectFit: 'cover' }}
+                        width={1000}
+                    />
             </div>
-            <div className="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
-                <div className="p-4">
+            <div className="absolute bottom-0 left-0 flex items-center gap-2 p-4">
+            {smallImages.map((image, index) => (
+                <img
+                    key={index}
+                    alt={`Product Image - ${productName}`}
+                    className="w-16 h-16 object-cover rounded-lg cursor-pointer"
+                    height={100}
+                    src={image.url}
+                    style={{ aspectRatio: '100/100', objectFit: 'cover' }}
+                    width={100}
+                    onClick={() => handleImageClick(image.url, index)}
+                />
+            ))}
+            </div>
+        </div>
+        <div className="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
+            <div className="p-4">
                 <h1 className="font-bold text-3xl lg:text-4xl mb-2">{productName ? productName : "Product Name"}</h1>
                 <p className="text-xl font-semibold text-green-500 mb-6">${parseInt(selectedVariant.price)}</p>
                 <div className="flex items-center gap-2 mb-2">
                     <img
-                    src={ShopImageSource}
-                    alt="Shop Logo"
-                    className="w-8 h-8"
-                    width={50}
-                    height={50}
-                    style={{ aspectRatio: "50/50", objectFit: "cover" }}
+                        src={ShopImageSource}
+                        alt="Shop Logo"
+                        className="w-8 h-8"
+                        width={50}
+                        height={50}
+                        style={{ aspectRatio: "50/50", objectFit: "cover" }}
                     />
                     <span className="text-lg font-semibold">Shop Name</span>
                 </div>
@@ -119,8 +105,9 @@ function ProductCard({ product }) {
                         <div className={`inline-flex items-center rounded-full border px-2.5 py-0.5 w-fit text-sm font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 bg-${colors[idx]}-100 text-${colors[idx]}-500`} key={idx}>
                             {tag ? tag : `tag-${idx}`}
                         </div>
-                    )): null}
+                    )) : null}
                 </div>
+
                 <div className="flex items-center gap-2 mb-6">
                     <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 w-fit text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 bg-green-500 text-white">
                         4.5
