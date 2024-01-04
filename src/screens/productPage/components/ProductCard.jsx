@@ -24,7 +24,7 @@ function ProductCard({ product }) {
 
     const defaultVariant = { name: 'Medium', price: '300' };
 
-    const [mainImage, setMainImage] = useState(ProductPlaceholderImage);
+    const [mainImage, setMainImage] = useState(product_images[0] ? product_images[0] : ProductPlaceholderImage);
     const [smallImages, setSmallImages] = useState([]);
 
     useEffect(() => {

@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
-import { Rating } from 'react-simple-star-rating';
-import ReviewCard from './ReviewCard';
+import StarRatings from 'react-star-ratings';
 
 function AddReviewCard({ addReview }) {
     const [rating, setRating] = useState(0);
+
+    const changeRating = (newRating, name) => {
+        setRating(newRating);
+    };
+
     const [name, setName] = useState('');
     const [review, setReview] = useState('');
     const [selectedOption, setSelectedOption] = useState('Option 1');
 
-    const handleRating = (rate) => {
-        setRating(rate);
-    };
 
     const createReviewCard = (e) => {
         e.preventDefault();
@@ -102,23 +103,13 @@ function AddReviewCard({ addReview }) {
                         </div>
                     </div>
                     <div>
-                        <Rating
-                            showTooltip
-                            allowFraction
-                            tooltipArray={[
-                                'Terrible',
-                                'Terrible+',
-                                'Bad',
-                                'Bad+',
-                                'Average',
-                                'Average+',
-                                'Great',
-                                'Great+',
-                                'Awesome',
-                                'Awesome+'
-                            ]}
-                            onClick={handleRating}
-                            initialValue={rating}
+                        <StarRatings
+                            rating={rating}
+                            starRatedColor="#ffa534"
+                            changeRating={changeRating}
+                            numberOfStars={5}
+                            starSelectingHoverColor="#ffe234"
+                            name='rating'
                         />
                     </div>
                     <button

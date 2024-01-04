@@ -58,6 +58,7 @@ function ProductPage() {
                         date={review.date} 
                         description={review.description}
                         rating={review.rating}
+                        option={review.option}
                     />
                 ))}
                 <AddReviewCard addReview={addReview} />
