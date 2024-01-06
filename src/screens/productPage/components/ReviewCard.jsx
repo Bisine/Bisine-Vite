@@ -25,7 +25,7 @@ function ReviewCard({userImage, name, date, description, rating, option}) {
                         <span className='text-gray-500'>Option: {option}</span>
                     </div>
                 </div>
-                <div>
+                <div className=''>
                     <Rating readonly showTooltip initialValue={rating} />
                 </div>
                 <p className="text-gray-500">

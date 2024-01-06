@@ -101,7 +101,7 @@ function AddReviewCard({ addReview }) {
                             </svg>
                         </div>
                     </div>
-                    <div>
+                    <div className='flex'>
                         <Rating
                             showTooltip
                             allowFraction
