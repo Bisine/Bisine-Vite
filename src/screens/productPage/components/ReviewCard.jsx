@@ -1,8 +1,9 @@
 import React from 'react'
 import userDefault from "../assests/userIcon.png"
-import { Rating } from 'react-simple-star-rating'
+import StarRatings from 'react-star-ratings';
 
 function ReviewCard({userImage, name, date, description, rating, option}) {
+    console.log(option);
     const userPhoto = userImage || userDefault
 
     return (
@@ -21,12 +22,19 @@ function ReviewCard({userImage, name, date, description, rating, option}) {
                     />
                     <div>
                         <h3 className="font-bold text-lg">{name}</h3>
-                        <span className="text-gray-500">{date}</span>
+                        <span className="text-gray-500 block">{date}</span>
                         <span className='text-gray-500'>Option: {option}</span>
                     </div>
                 </div>
-                <div className=''>
-                    <Rating readonly showTooltip initialValue={rating} />
+
+                <div>
+                        <StarRatings
+                            rating={rating}
+                            starRatedColor="#ffa534"
+                            isSelectable={false}
+                            numberOfStars={5}
+                            name='rating'
+                        />
                 </div>
                 <p className="text-gray-500">
                     {description}

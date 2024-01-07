@@ -3,6 +3,9 @@ import Navbar from "../../CommonComponets/NavBar"
 import AddReviewCard from './components/AddReviewCard'
 import ProductCard from './components/ProductCard'
 import ReviewCard from './components/ReviewCard'
+import cloth1 from "../productPage/assests/URBANMONKEY06_11_231642.webp"
+import cloth2 from "../productPage/assests/URBANMONKEY06_11_231679.webp"
+import cloth3 from "../productPage/assests/URBANMONKEY07_11_231899.webp"
 
 function ProductPage() {
     const [reviews, setReviews] = useState([]);
@@ -16,9 +19,9 @@ function ProductPage() {
         "product_name": "Spider Man T-Shirt",
         "product_description": "A marvel fan should buy this cozy spider man t shirt ",
         "product_images": [
-            "url1",
-        "url2",
-        "url3"
+            cloth1,
+            cloth2,
+            cloth3,
         ],
         "product_tags": [
             "Fashion",
@@ -55,6 +58,7 @@ function ProductPage() {
                         date={review.date} 
                         description={review.description}
                         rating={review.rating}
+                        option={review.option}
                     />
                 ))}
                 <AddReviewCard addReview={addReview} />
