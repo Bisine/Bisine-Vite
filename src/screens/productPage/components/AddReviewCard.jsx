@@ -1,29 +1,32 @@
 import React, { useState } from 'react';
 import StarRatings from 'react-star-ratings';
+import { useId } from 'react';
 
-function AddReviewCard({ addReview }) {
+function AddReviewCard({addNewReview}) {
+    
+    const id = useId();
+    
     const [rating, setRating] = useState(0);
-
-    const changeRating = (newRating, name) => {
-        setRating(newRating);
-    };
-
     const [name, setName] = useState('');
     const [review, setReview] = useState('');
     const [selectedOption, setSelectedOption] = useState('Option 1');
-
-
+    
+    const changeRating = (newRating) => {
+        setRating(newRating);
+    };
+    
     const createReviewCard = (e) => {
         e.preventDefault();
         if (name && review && rating && selectedOption) {
             const newReview = {
+                id: id,
                 name: name,
                 rating: rating,
                 description: review,
                 option: selectedOption,
                 date: getCurrentDateFormatted(),
             };
-            addReview(newReview);
+            addNewReview(newReview);
             setName('');
             setReview('');
             setRating(0);
@@ -110,6 +113,7 @@ function AddReviewCard({ addReview }) {
                             numberOfStars={5}
                             starSelectingHoverColor="#ffe234"
                             name='rating'
+                            starDimension="40px"
                         />
                     </div>
                     <button

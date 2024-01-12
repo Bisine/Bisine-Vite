@@ -1,15 +1,14 @@
-import React from 'react'
-import userDefault from "../assests/userIcon.png"
+import React from 'react';
+import userDefault from '../assests/userIcon.png';
 import StarRatings from 'react-star-ratings';
 
-function ReviewCard({userImage, name, date, description, rating, option}) {
-    console.log(option);
-    const userPhoto = userImage || userDefault
+function ReviewCard({ id, userImage, name, date, description, rating, option }) {
+    const userPhoto = userImage || userDefault;
 
     return (
         <div
-        className="rounded-lg border mb-4 bg-card text-card-foreground shadow-sm"
-        data-v0-t="card"
+            className="rounded-lg border mb-4 bg-card text-card-foreground shadow-sm"
+            data-v0-t="card"
         >
             <div className="p-4 flex flex-col gap-4">
                 <div className="flex items-center gap-4">
@@ -23,24 +22,24 @@ function ReviewCard({userImage, name, date, description, rating, option}) {
                     <div>
                         <h3 className="font-bold text-lg">{name}</h3>
                         <span className="text-gray-500 block">{date}</span>
-                        <span className='text-gray-500'>Option: {option}</span>
+                        <span className="text-gray-500">Option: {option}</span>
                     </div>
+                    
                 </div>
                 <div>
-                        <StarRatings
-                            rating={rating}
-                            starRatedColor="#ffa534"
-                            isSelectable={false}
-                            numberOfStars={5}
-                            name='rating'
-                        />
+                    <StarRatings
+                        rating={rating}
+                        starRatedColor="#ffa534"
+                        isSelectable={false}
+                        numberOfStars={5}
+                        starDimension='40px'
+                        name="rating"
+                    />
                 </div>
-                <p className="text-gray-500">
-                    {description}
-                </p>
+                <p className="text-gray-500">{description}</p>
             </div>
         </div>
-    )
+    );
 }
 
-export default ReviewCard
+export default ReviewCard;
