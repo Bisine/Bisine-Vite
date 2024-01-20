@@ -13,6 +13,7 @@ import CartPage from "./screens/cartPage/CartPage";
 import ProductAdditionScreen from "./screens/addProduct/AddProduct";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import ShopScreen from "./screens/shop/ShopScreen.jsx";
+import AdminPage from "./screens/Admin/AdminPage.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   < GoogleOAuthProvider clientId="774961232823-b6fmrl6p9tcbhgk19fuv7a6ftbbegcm6.apps.googleusercontent.com">
@@ -29,6 +30,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/*/*" element={<h1>hi</h1>}/>
           <Route path="/*" element={<ShopScreen/>}/>
           <Route path="/product" element={<ProductPage />} />
+          <Route path="/admin" element={<AdminPage />} />
         </Routes>
       </BrowserRouter>
     </Provider>

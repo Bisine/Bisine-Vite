@@ -8,11 +8,11 @@ const NavBar = ({ isSearchVisible }) => {
   const navigate = useNavigate();
 
   return (
-    <nav id="navbar" className="w-full z-50 ">
+    <nav id="navbar" className="w-full sticky top-0 left-0 right-0 z-50 ">
       <div
         className={`${
           isSearchClicked ? "flex" : "hidden"
-        } sm:hidden fixed z-50 px-4 bg-blue-400 w-full py-4 gap-5`}
+        } sm:hidden sticky top-0 left-0 right-0 z-50 px-4 bg-blue-400 w-full py-4 gap-5`}
       >
         <button onClick={() => setIsSearchClicked((prev) => !prev)}>
           <svg
@@ -38,7 +38,7 @@ const NavBar = ({ isSearchVisible }) => {
       <div
         className={`px-4  sm:px-8 py-4 ${
           isSearchClicked ? "hidden" : "flex"
-        }  justify-between z-50 fixed w-full bg-blue-400`}
+        }  justify-between z-50 sticky top-0 left-0 right-0 w-full bg-blue-400`}
       >
         <div className="flex gap-2 items-center">
           <button className="hidden sm:block">
