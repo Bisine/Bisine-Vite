@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NavBar from "../../CommonComponets/NavBar";
 import Product from "../../CommonComponets/Product";
 
+
+
 function HomePage() {
   const [selectedCategoryId, setSelectedCategoryId] = useState(1);
+
+  
 
   const availableCategories = [
     { id: 1, category: "All" },

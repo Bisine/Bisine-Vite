@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setFullName, setPhoneNumber } from "../../redux/features/user";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../axios";
+import axios from "axios";
 
 const ProfileCreation = () => {
   const navigate = useNavigate();
@@ -42,27 +43,20 @@ const ProfileCreation = () => {
 
     else if (isChecked){
       setIsError(null)
-      axiosInstance
-      .post("user/register/", {
-        email: localStorage.getItem("email"),
-        user_name: fullName,
-        phone_number: "+91" + phoneNumber,
-      })
-      .then((res) => {
+      axios.post('http://127.0.0.1:3000/api/user/register', {
+        email : localStorage.getItem('email'),
+        fullName: fullName,
+        profileURL: localStorage.getItem('profileUrl'),
+        phoneNumber: phoneNumber
+      }).then((res) => {
         if (res.status == 201) {
-          axiosInstance
-            .post("user/token/", {
-              email: email,
-            })
-            .then((res) => {
-              if (res.status == 200) {
-                localStorage.setItem("refresh", res.data.refresh);
-                localStorage.setItem("access", res.data.access);
-                navigate("/");
-              }
-            });
+          const {access_token} = res.data;
+          localStorage.setItem("access_token",access_token);
+          navigate("/");
         }
-      });
+      }).catch(err => {
+        console.log(err);
+      })
     } else {
       setErrorMsg('To create an account, you should accept terms and conditions');
       setIsError(true);

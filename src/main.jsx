@@ -20,13 +20,13 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomePage/>} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/profileCreate" element={<ProfileCreatePage/>}/>
-          <Route path="/shopCreate" element={<ShopCreate/>}/>
+          <Route path="/user/login" element={<LoginPage />} />
+          <Route path="/user/register" element={<ProfileCreatePage/>}/>
+          {/* <Route path="/shopCreate" element={<ShopCreate/>}/>
           <Route path="/cart" element={<CartPage/>}/>
           <Route path="/addProduct" element={<ProductAdditionScreen/>}/>
-          <Route path="/*/*" element={<h1>hi</h1>}/>
-          <Route path="/*" element={<ShopScreen/>}/>
+          <Route path="/" element={<h1>hi</h1>}/>
+          <Route path="/*" element={<ShopScreen/>}/> */}
         </Routes>
       </BrowserRouter>
     </Provider>
