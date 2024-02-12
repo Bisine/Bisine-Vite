@@ -16,6 +16,7 @@ const ProfileCreation = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [isError, setIsError] = useState(null);
   const [errorMsg, setErrorMsg] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setIsError(null)
@@ -43,12 +44,14 @@ const ProfileCreation = () => {
 
     else if (isChecked){
       setIsError(null)
-      axios.post('http://127.0.0.1:3000/api/user/register', {
+      setIsLoading(true);
+      axios.post('https://bisinenode.vercel.app/api/user/register', {
         email : localStorage.getItem('email'),
         fullName: fullName,
         profileURL: localStorage.getItem('profileUrl'),
         phoneNumber: phoneNumber
       }).then((res) => {
+        setIsLoading(false);
         if (res.status == 201) {
           const {access_token} = res.data;
           localStorage.setItem("access_token",access_token);
@@ -129,10 +132,11 @@ const ProfileCreation = () => {
         </div>
         }
         <button
+          disabled={isLoading}
           type="submit"
-          className="rounded-lg bg-blue-500 py-2 w-60 lg:w-96 mt-2"
+          className="rounded-lg bg-blue-500 py-2 w-60 lg:w-96 mt-2 disabled:bg-gray-400"
         >
-          Create Account
+         {isLoading ? "Loading" : "Create Account"}
         </button>
       </form>
     </div>

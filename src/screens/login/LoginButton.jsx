@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Google from "./google.png";
 //import { GoogleLogin , GoogleLogout} from "react-google-login";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,6 +17,7 @@ const LoginButton = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const email = useSelector((e) => e.user.email);
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSuccess = (re) => {
     console.log("Imaghe", re.picture);
@@ -25,9 +26,11 @@ const LoginButton = () => {
     localStorage.setItem('profileUrl',re.picture);
     dispatch(setEmail(re.email));
     dispatch(setProfileUrl(re.picture));
+    setIsLoading(true);
     axios
-      .post("http://localhost:3000/api/user/auth", { email: re.email})
+      .post("https://bisinenode.vercel.app/api/user/auth", { email: re.email})
       .then((res) => {
+        setIsLoading(false);
         if (res.status == 200) {
           const { user, access_token } = res.data;
           console.log("User:", user);
@@ -100,9 +103,14 @@ const LoginButton = () => {
             <p>Continue with Google</p>
           </button> */}
       <GoogleLogin
+         
         onSuccess={(r) => onSuccess(jwtDecode(r.credential))}
         theme="filled_blue"
       />
+      {
+        isLoading ? <p>Loading</p> : <></>
+      }
+
       <button onClick={() => googleLogout()}>Logout</button>
       {/* <p>{email}</p>
       <GoogleLogout

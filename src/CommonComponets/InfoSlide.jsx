@@ -1,6 +1,6 @@
 import React from "react";
 import Logo from "../Logo.png";
-import Profile from "./assets/Profile.png";
+import Profile from "./assets/profile.png";
 
 const InfoSlide = () => {
   return (
