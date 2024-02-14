@@ -14,7 +14,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import ShopScreen from "./screens/shop/ShopScreen.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  < GoogleOAuthProvider clientId="774961232823-b6fmrl6p9tcbhgk19fuv7a6ftbbegcm6.apps.googleusercontent.com">
+  < GoogleOAuthProvider  clientId="774961232823-b6fmrl6p9tcbhgk19fuv7a6ftbbegcm6.apps.googleusercontent.com">
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
