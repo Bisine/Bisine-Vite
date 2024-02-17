@@ -6,6 +6,7 @@ export const shop = createSlice({
     initialState: {
         shopName: '',
         shopDescription: '',
+        shopId:'',
         shopTags:[],
         pincode:'',
         flat:'',
@@ -22,6 +23,9 @@ export const shop = createSlice({
     reducers: {
         setShopName : (state, action) => {
             state.shopName = action.payload
+        },
+        setShopId: (state,action) => {
+            state.shopId = action.payload
         },
         setShopDescription: (state,action) => {
             state.shopDescription = action.payload
@@ -66,6 +70,6 @@ export const shop = createSlice({
     }
 })
 
-export const {setShopName, setShopDescription,setShopTags,setPinCode,setFlat, setArea,setLandmark,setCity,setState, setContactNumber, setEmailID, setSocialMediaLink, setBanner, setLogo} = shop.actions
+export const {setShopName, setShopDescription,setShopTags,setPinCode,setFlat, setArea,setLandmark,setCity,setState, setContactNumber, setEmailID, setSocialMediaLink, setBanner, setLogo,setShopId} = shop.actions
 
 export default shop.reducer

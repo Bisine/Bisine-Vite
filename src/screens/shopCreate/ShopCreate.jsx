@@ -7,6 +7,7 @@ import LocationDetails from "./components/LocationDetails";
 import InfoGraphics from "./components/InfoGraphics";
 import ContactInfo from "./components/ContactInfo";
 import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 import {
   setAreaError,
   setCityError,
@@ -15,16 +16,19 @@ import {
   setFlatError,
   setPinCodeError,
   setShopDescriptionError,
+  setShopIdError,
   setShopNameError,
   setShopTagsError,
   setStateError,
 } from "../../redux/features/shopError";
 import axiosInstance from "../../axios";
+import { useNavigate } from "react-router-dom";
 
 const ShopCreate = () => {
   const shopName = useSelector((e) => e.shop.shopName);
   const shopDescription = useSelector((e) => e.shop.shopDescription);
   const shopTags = useSelector((e) => e.shop.shopTags);
+  const shopId = useSelector((e) => e.shop.shopId);
   const pincode = useSelector((e) => e.shop.pincode);
   const flat = useSelector((e) => e.shop.flat);
   const area = useSelector((e) => e.shop.area);
@@ -36,7 +40,7 @@ const ShopCreate = () => {
   const socialMediaLink = useSelector((e) => e.shop.socialMediaLink);
   const logo = useSelector((e) => e.shop.logo);
   const banner = useSelector((e) => e.shop.banner);
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [part, setPart] = useState(1);
 
@@ -58,7 +62,7 @@ const ShopCreate = () => {
     return emailRegex.test(email);
   }
 
-  const nextPart = () => {
+  const nextPart = async () => {
     if (part == 1) {
       if (shopName == "") {
         dispatch(setShopNameError("Kindly enter the shop name"));
@@ -66,8 +70,34 @@ const ShopCreate = () => {
         dispatch(setShopDescriptionError("Kindly enter the shop description"));
       } else if (shopTags.length == 0) {
         dispatch(setShopTagsError("Kindle enter the shop tags"));
+      } else if (shopId == "") {
+        dispatch(setShopIdError("Kindly enter a unique shop id."));
       } else {
-        incrementPart();
+        //Check the entered unique id is unique or not and give appropriate error message
+        try {
+          
+          const response = await axios.post(
+            `${import.meta.env.VITE_API_URL}/shop/checkUniqueId`,
+            {
+              unique_id: shopId,
+            }
+          );
+          if (response.status === 200) {
+            // Unique ID is available, proceed to the next part
+            incrementPart();
+          } else {
+          }
+        } catch (error) {
+          if (error.response && error.response.status === 409) {
+            // Unique ID is already used, display appropriate error message
+            dispatch(setShopIdError("The unique shop ID is already used."));
+          } else {
+            console.error("Error checking unique ID:", error);
+            dispatch(
+              setShopIdError("Error checking unique shop ID. Please try again.")
+            );
+          }
+        }
       }
     } else if (part == 2) {
       if (pincode == "") {
@@ -84,11 +114,17 @@ const ShopCreate = () => {
         incrementPart();
       }
     } else if (part == 3) {
-      incrementPart(shopName);
+      if (logo == "") {
+        alert("Kindly upload the shop logo");
+      } else if (banner == "") {
+        alert("Kindly upload the shop banner");
+      } else {
+        incrementPart();
+      }
     }
   };
 
-  const createShop = () => {
+  const createShop = async () => {
     if (contactNumber == "" || !isValidPhoneNumber(contactNumber)) {
       dispatch(
         setContactNumberError("Kindly enter your 10 digit contact number")
@@ -97,28 +133,50 @@ const ShopCreate = () => {
       dispatch(setEmailIDError("Kindly enter your business email correctly"));
     } else {
       //Create shop
-      const location = [pincode, flat, area, landmark];
-      let form_data = new FormData();
-      form_data.append("name", shopName);
-      form_data.append("description", shopDescription);
-      form_data.append("tags", shopTags.join(","));
-      form_data.append("location", location.join(";"));
-      form_data.append("city", city);
-      form_data.append("state", state);
-      form_data.append("logo", logo);
-      form_data.append("contact_number", "+91" + contactNumber);
-      form_data.append("email_id", emailID);
-      form_data.append("social_link", socialMediaLink);
-      form_data.append("banner", banner);
-      axiosInstance.post("shop/create/", form_data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }).then((res) => {
-        console.log(res)
-      }).catch((err) => {
-        console.log(err)
-      });
+      const shopData = {
+        name: shopName,
+        description: shopDescription,
+        shop_tags: shopTags,
+        unique_id: shopId,
+        pincode: pincode,
+        flat: flat,
+        area: area,
+        landmark: landmark,
+        city: city,
+        state: state,
+        contact_number: contactNumber,
+        business_email: emailID,
+        social_media_link: socialMediaLink,
+        shop_logo_url: logo,
+        shop_banner_url: banner,
+        owner_email: localStorage.getItem("email"),
+      };
+
+      try {
+        const accessToken = localStorage.getItem("access_token");
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_URL}/shop/create`,
+          shopData,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        if (response.status === 201) {
+          console.log("Shop created successfully");
+          //Redirect to shop dashboard
+          //for now regirecting to home page
+          navigate('/');
+          // Optionally handle success response
+        } else {
+          console.error("Failed to create shop");
+          // Optionally handle failure response
+        }
+      } catch (error) {
+        console.error("Error creating shop:", error);
+        // Optionally handle error
+      }
     }
   };
 
@@ -162,7 +220,9 @@ const ShopCreate = () => {
             <button
               onClick={() => decrementPart()}
               disabled={part == 1}
-              className="bg-blue-700 px-4  py-2 h-fit rounded-xl disabled:bg-gray-400"
+              className={`bg-blue-700 px-4  py-2 h-fit rounded-xl disabled:bg-gray-400 ${
+                part == 1 ? "cursor-not-allowed" : "cursor-pointer"
+              }`}
             >
               Previous
             </button>

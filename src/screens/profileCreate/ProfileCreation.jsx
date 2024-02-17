@@ -45,7 +45,7 @@ const ProfileCreation = () => {
     else if (isChecked){
       setIsError(null)
       setIsLoading(true);
-      axios.post('https://bisinenode.vercel.app/api/user/register', {
+      axios.post(`${import.meta.env.VITE_API_URL}/user/register`, {
         email : localStorage.getItem('email'),
         fullName: fullName,
         profileURL: localStorage.getItem('profileUrl'),
@@ -57,7 +57,13 @@ const ProfileCreation = () => {
           localStorage.setItem("access_token",access_token);
           navigate("/");
         }
-      }).catch(err => {
+      }).catch(error => {
+        if (error.response && error.response.status === 409) {
+          // Handle 409 error (user already created)
+          console.log(error.response);
+          alert("You already have created an account with this email.");
+          navigate("/"); // Navigate to signup page or another page
+        }
         console.log(err);
       })
     } else {

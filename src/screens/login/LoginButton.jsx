@@ -29,7 +29,7 @@ const LoginButton = () => {
     dispatch(setProfileUrl(re.picture));
     setIsLoading(true);
     axios
-      .post("https://bisinenode.vercel.app/api/user/auth", { email: re.email })
+      .post(`${import.meta.env.VITE_API_URL}/user/auth`, { email: re.email })
       .then((res) => {
         setIsLoading(false);
         if (res.status == 200) {

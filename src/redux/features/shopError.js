@@ -5,6 +5,7 @@ export const shopError = createSlice({
     initialState: {
         shopNameError: '',
         shopDescriptionError: '',
+        shopIdError:'',
         shopTagsError:[],
         pincodeError:'',
         flatError:'',
@@ -19,6 +20,9 @@ export const shopError = createSlice({
     reducers: {
         setShopNameError : (state, action) => {
             state.shopNameError = action.payload
+        },
+        setShopIdError: (state,action) => {
+            state.shopIdError = action.payload
         },
         setShopDescriptionError: (state,action) => {
             state.shopDescriptionError = action.payload
@@ -56,6 +60,6 @@ export const shopError = createSlice({
     }
 })
 
-export const {setShopNameError, setShopDescriptionError,setShopTagsError,setPinCodeError,setFlatError, setAreaError,setLandmarkError,setCityError,setStateError, setContactNumberError, setEmailIDError, setSocialMediaLinkError} = shopError.actions
+export const {setShopNameError, setShopDescriptionError,setShopTagsError,setPinCodeError,setFlatError, setAreaError,setLandmarkError,setCityError,setStateError, setContactNumberError, setEmailIDError, setSocialMediaLinkError,setShopIdError} = shopError.actions
 
 export default shopError.reducer
