@@ -77,7 +77,7 @@ const ShopCreate = () => {
         try {
           
           const response = await axios.post(
-            `https://bisinenode.vercel.app/api/shop/checkUniqueId`,
+            `${import.meta.env.VITE_API_URL}/shop/checkUniqueId`,
             {
               unique_id: shopId,
             }
@@ -155,7 +155,7 @@ const ShopCreate = () => {
       try {
         const accessToken = localStorage.getItem("access_token");
         const response = await axios.post(
-          `https://bisinenode.vercel.app/api/shop/create`,
+          `${import.meta.env.VITE_API_URL}/shop/create`,
           shopData,
           {
             headers: {
@@ -165,6 +165,8 @@ const ShopCreate = () => {
         );
         if (response.status === 201) {
           console.log("Shop created successfully");
+          const {shop_id} = response.data;
+          localStorage.setItem("shop_id",shop_id);
           //Redirect to shop dashboard
           //for now regirecting to home page
           navigate('/');

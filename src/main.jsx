@@ -23,8 +23,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/user/login" element={<LoginPage />} />
           <Route path="/user/register" element={<ProfileCreatePage/>}/>
            <Route path="/shop/create" element={<ShopCreate/>}/>
+           <Route path="/product/add" element={<ProductAdditionScreen/>}/>
           {/*<Route path="/cart" element={<CartPage/>}/>
-          <Route path="/addProduct" element={<ProductAdditionScreen/>}/>
+          
           <Route path="/" element={<h1>hi</h1>}/>
           <Route path="/*" element={<ShopScreen/>}/> */}
         </Routes>

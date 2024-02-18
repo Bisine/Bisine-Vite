@@ -13,6 +13,7 @@ import {
 } from "../../redux/features/product";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const ProductAdditionScreen = () => {
   const [showDescriptionTooltip, setDescriptionShowTooltip] = useState(false);
@@ -30,21 +31,28 @@ const ProductAdditionScreen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [tempImages, setTempImages] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
   // Function to handle image uploads
   const handleImageUpload = (e) => {
     const files = e.target.files;
-    const updatedImages = [...productImages];
+    const updatedImages = [...tempImages];
     for (let i = 0; i < files.length; i++) {
+      console.log("Hi");
+      if (updatedImages.length >= 3) {
+        break;
+      }
       updatedImages.push({
         id: Date.now() + i, // You can use a better unique identifier
         file: files[i],
       });
     }
-    dispatch(setImages(updatedImages));
+    setTempImages(updatedImages);
   };
   const removeImage = (id) => {
-    const updatedImages = productImages.filter((image) => image.id !== id);
-    dispatch(setImages(updatedImages));
+    const updatedImages = tempImages.filter((image) => image.id !== id);
+    setTempImages(updatedImages);
   };
 
   // Function to handle changes in variants
@@ -53,39 +61,91 @@ const ProductAdditionScreen = () => {
   //   updatedVariants[index][field] = value;
   //   dispatch(setProductVariants(updatedVariants));
   // };
-  const handleVariantChange = (index, field, value) => {
+  const handleVariantChange = (variantIndex, field, value) => {
     const updatedVariants = [...productVariants];
-    updatedVariants[index] = {
-      ...updatedVariants[index],
+    updatedVariants[variantIndex] = {
+      ...updatedVariants[variantIndex],
       [field]: value,
     };
     dispatch(setProductVariants(updatedVariants));
   };
+
   // Function to add a new variant
   const addVariant = () => {
-    dispatch(setProductVariants([...productVariants, { name: "", price: "" }]));
+    dispatch(
+      setProductVariants([
+        ...productVariants,
+        {
+          name: "",
+          price: "",
+          quantityInStock: "",
+          weight: "",
+          weightUnit: "kg",
+        },
+      ])
+    );
   };
 
   // Function to remove a variant
-  const removeVariant = (index) => {
+  const removeVariant = (variantIndex) => {
     const updatedVariants = [...productVariants];
-    updatedVariants.splice(index, 1);
+    updatedVariants.splice(variantIndex, 1);
     dispatch(setProductVariants(updatedVariants));
   };
 
-  const submitProductData = () => {
-    const data = {
-      shop_id: 1,
+  //Function to upload images in Cloudinary
+  const uploadImage = async (file) => {
+    // Secret keys for Cloudinary
+    const preset_key = "bisineimages";
+    const cloudname = "ddkpclbs2";
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", preset_key);
+
+    try {
+      const response = await axios.post(
+        `https://api.cloudinary.com/v1_1/${cloudname}/image/upload`,
+        formData
+      );
+      console.log(response.data.secure_url)
+      return response.data.secure_url || null;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  };
+
+  const submitProductData = async () => {
+    setIsLoading(true)
+    var imageUrls = [];
+    for (var i = 0; i < tempImages.length; i++) {
+      const res_url = await uploadImage(tempImages[i].file)
+      imageUrls.push(res_url);
+    }
+    const shop_id = localStorage.getItem("shop_id");
+
+    const request_data = {
       product_name: productName,
       product_description: productDescription,
-      product_images: productImages,
       product_tags: productTags,
-      product_variants: productVariants,
-      product_weight: weight,
-      product_weight_unit: weightUnit,
-      product_quantity_in_stock: quantityInStock,
-    };
-    console.log(data);
+      product_image_urls: imageUrls,
+      variants: productVariants,
+      shop_id: shop_id
+    }
+
+    try{
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/product/create`,request_data);
+      if (response.status == 201) {
+        //Product is sucessfully added, need to naviaate to Inventory
+        navigate("/");
+      }
+    } catch (error) {
+      alert("Sorry, something went wrong, please try later...")
+      console.log(error);
+    }
+    
+    setIsLoading(false);
   };
 
   return (
@@ -191,7 +251,7 @@ const ProductAdditionScreen = () => {
               </div>
               <h1 className="text-black mt-3 font-medium">Product Images:</h1>
               <div className="bg-gray-300 rounded h-28 flex p-2">
-                {productImages.map((image) => (
+                {tempImages.map((image) => (
                   <div key={image.id} className="relative mr-2">
                     <img
                       src={URL.createObjectURL(new Blob([image.file]))}
@@ -211,7 +271,7 @@ const ProductAdditionScreen = () => {
                 <input
                   type="file"
                   multiple
-                  disabled={productImages.length == 3}
+                  disabled={tempImages.length == 3}
                   accept="image/*"
                   className="hidden"
                   id="image-upload"
@@ -220,7 +280,7 @@ const ProductAdditionScreen = () => {
                 <label
                   htmlFor="image-upload"
                   className={`cursor-pointer ${
-                    productImages.length == 3 ? "bg-gray-500" : "bg-blue-500"
+                    tempImages.length == 3 ? "bg-gray-500" : "bg-blue-500"
                   } text-white rounded-md px-4 py-2 `}
                 >
                   Upload Images
@@ -360,10 +420,11 @@ const ProductAdditionScreen = () => {
               <div className="mt-2 bg-white rounded-lg text-black shadow-md p-4">
                 <h1 className="font-bold">Submit Products</h1>
                 <button
-                  onClick={() => navigate(-1)}
-                  className="bg-blue-500 mt-2 hover:bg-blue-700 text-white rounded-md px-4 py-2  w-full   "
+                  disabled={isLoading}
+                  onClick={() => submitProductData()}
+                  className="bg-blue-500 mt-2 hover:bg-blue-700 text-white rounded-md px-4 py-2  w-full disabled:bg-gray-500 disabled:cursor-not-allowed transition-all ease-in-out duration-150  "
                 >
-                  Submit
+                  {isLoading ? "Loading..." : "Submit"}
                 </button>
                 <button
                   onClick={() => navigate(-1)}
