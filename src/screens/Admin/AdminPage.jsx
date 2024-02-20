@@ -1,7 +1,8 @@
 import React, {useState} from "react";
 import { useSelector } from 'react-redux';
 import Navbar from "../../CommonComponets/NavBar"
-import ReviewCard from "../productPage/components/ReviewCard"
+import ProductCard from "./components/ProductCard"
+import ReviewPage from "./components/ReviewPage";
 
 function AdminPage() {
 
@@ -10,6 +11,18 @@ function AdminPage() {
 
     const handleNavItemClick = (item) => {
       setActiveNavItem(item);
+    };
+
+    const renderPageContent = () => {
+      switch (activeNavItem) {
+        case "Dashboard":
+          return <ProductCard />;
+        case "Content":
+          return <ReviewPage reviews={reviews} />;
+        // Add cases for other nav items as needed
+        default:
+          return null;
+      }
     };
 
   return (
@@ -98,47 +111,9 @@ function AdminPage() {
               </li>
             </div>
           </aside>
-          <main className="w-full lg:w-3/4 p-4">
-            <div dir="ltr" data-orientation="horizontal">
-              <li className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-base font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 cursor-pointer">
-                Overview
-              </li>
-              <li className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-base font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 cursor-pointer">
-                Reach
-              </li>
-              <li className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-base font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 cursor-pointer">
-                Engagement
-              </li>
-              <li className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-base font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 cursor-pointer border-b-2 border-blue-600">
-                Audience
-              </li>
-              <li className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-base font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 cursor-pointer">
-                Revenue
-              </li>
-              <li className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-base font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 cursor-pointer">
-                Research
-              </li>
-            </div>
-            <section className="mt-8">
-              <h2 className="text-xl font-bold">Reviews Of your videos</h2>
-              <p className="text-sm text-gray-500">Last 90 days</p>
-              <div className="mt-4 flex flex-col gap-4">
-                {reviews.map((review) => (
-                        <ReviewCard
-                            key={review.id}
-                            id={review.id}
-                            userImage={review.userImage}
-                            name={review.name}
-                            date={review.date}
-                            description={review.description}
-                            rating={review.rating}
-                            option={review.option}
-                        />
-                    ))}
-              </div>
-                {reviews.length ==0 && <p className="items-center justify-center whitespace-nowrap rounded-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none text-center disabled:opacity-50 hover:bg-accent text-2xl hover:text-accent-foreground h-10 px-4 py-2 mt-4">
-                    No Reviews Currently Available
-                </p>}
+          <main className="w-full lg:w-3/4 pl-4">
+            <section>
+              {renderPageContent()}
             </section>
           </main>
         </div>

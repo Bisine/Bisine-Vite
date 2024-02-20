@@ -113,7 +113,7 @@ function AddReviewCard({addNewReview}) {
                             numberOfStars={5}
                             starSelectingHoverColor="#ffe234"
                             name='rating'
-                            starDimension="40px"
+                            starDimension="30px"
                         />
                     </div>
                     <button
