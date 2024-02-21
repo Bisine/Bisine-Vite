@@ -15,6 +15,10 @@ function HomePage() {
     { id: 3, category: "Clothing" },
     { id: 4, category: "Electronics" },
   ];
+
+  useEffect(()=>{
+    console.log("Env Variables : ",import.meta.env.VITE_API_URL);
+  },[]);
   return (
     <>
       <section className="min-h-screen bg-blue-50">
