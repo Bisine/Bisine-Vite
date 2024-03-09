@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./screens/login/page.jsx";
 import { store } from "./redux/store.js";
 import { Provider } from "react-redux";
+import ProductPage from "./screens/productPage/ProductPage.jsx";
 import ProfileCreatePage from "./screens/profileCreate/page.jsx";
 import HomePage from "./screens/homePage/HomePage";
 import ShopCreate from "./screens/shopCreate/ShopCreate";
@@ -28,6 +29,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           
           <Route path="/" element={<h1>hi</h1>}/>
           <Route path="/*" element={<ShopScreen/>}/> */}
+          <Route path="/product" element={<ProductPage />} />
         </Routes>
       </BrowserRouter>
     </Provider>
