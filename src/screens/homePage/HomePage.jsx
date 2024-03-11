@@ -17,7 +17,7 @@ function HomePage() {
   ];
 
   useEffect(()=>{
-    console.log("Env Variables : ",import.meta.env.VITE_API_URL);
+   
   },[]);
   return (
     <>
@@ -31,10 +31,7 @@ function HomePage() {
             )}
           </div>
           <div className="mt-2 z-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-                <Product/>
-                <Product/>
-                <Product/>
-                <Product/>
+                
           </div>
         </div>
       </section>

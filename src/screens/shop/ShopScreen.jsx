@@ -16,7 +16,9 @@ import {
   setLandmark,
   setLogo,
   setPinCode,
+  setProducts,
   setShopDescription,
+  setShopId,
   setShopName,
   setShopTags,
   setSocialMediaLink,
@@ -25,10 +27,14 @@ import {
 import { setPhoneNumber } from "../../redux/features/user";
 import { useEffect, useState } from "react";
 import Product from "../../CommonComponets/Product";
-
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 export default function ShopScreen() {
+  //For getting shop id from the url
+  const params = useParams();
   //State for handling UI
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+
 
   //State variables for storing details of shop
   const shopName = useSelector((e) => e.shop.shopName);
@@ -45,40 +51,54 @@ export default function ShopScreen() {
   const socialMediaLink = useSelector((e) => e.shop.socialMediaLink);
   const logo = useSelector((e) => e.shop.logo);
   const banner = useSelector((e) => e.shop.banner);
+  const products = useSelector(e => e.shop.products);
+  const shopId = useSelector(e => e.shop.shopId)
+  const navigate = useNavigate();
 
   //dispatch
   const dispatch = useDispatch();
 
-  const getShopDetails = () => {
-    //Fetch shop details of the shop from the shop name
-    dispatch(setShopName("ABC's clothing"));
-    dispatch(
-      setShopDescription(
-        "A clothing branch with good clothes at cheap affordable price in Chennai. We have clothes for men, women and children. Once clothing brand for every shop."
-      )
-    );
-    dispatch(setShopTags("Clothing, Menswear, Kids wear"));
-    const location = "12345,Flat 101,Main Street,Some Landmark".split(",");
-    const [pincode, flat, area, landmark] = location;
-    dispatch(setPinCode(pincode));
-    dispatch(setFlat(flat));
-    dispatch(setArea(area));
-    dispatch(setLandmark(landmark));
-    dispatch(setCity("Chennai"));
-    dispatch(setState("Tamil Nadu"));
-    dispatch(setPhoneNumber("9556875400"));
-    dispatch(setEmailID("aswinraaj.ps@gmail.com"));
-    dispatch(setSocialMediaLink("https://www.instagram.com/aswin.code"));
-    dispatch(
-      setLogo(
-        "https://media.istockphoto.com/id/1428698181/vector/play-triangle-symbol-inside-3d-cube-elements-isometric-block-shapes-make-unity.jpg?s=612x612&w=0&k=20&c=-OlfdB7h2hNxWAT_COAExvkFeMcr4bm1Ix9WNRx4WBQ="
-      )
-    );
-    dispatch(
-      setBanner(
-        "https://t4.ftcdn.net/jpg/05/70/59/93/360_F_570599394_TfPXxCqsP0OaiGKlIpyIGMK9JN1UqY9a.jpg"
-      )
-    );
+  const getShopDetails = async (shop_id) => {
+    try {
+      // Retrieve authorization token from localStorage
+      const token = localStorage.getItem("access_token");
+
+      // Configure Axios request headers with authorization token
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+
+      // Axios GET request with authorization token
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/shop/${shop_id}`, {
+        headers: headers,
+      });
+      const data = response.data;
+
+      // Update Redux store with fetched shop details
+      dispatch(setShopName(data.name));
+      dispatch(setShopId(data.unique_id))
+      dispatch(setShopDescription(data.description));
+      dispatch(setShopTags(data.shop_tags.join(", "))); // Assuming shop_tags is an array
+      dispatch(setPinCode(data.pincode));
+      dispatch(setFlat(data.flat));
+      dispatch(setArea(data.area));
+      dispatch(setLandmark(data.landmark));
+      dispatch(setCity(data.city));
+      dispatch(setState(data.state));
+      dispatch(setPhoneNumber(data.contact_number));
+      dispatch(setEmailID(data.business_email));
+      dispatch(setSocialMediaLink(data.social_media_link));
+      dispatch(setLogo(data.shop_logo_url));
+      dispatch(setBanner(data.shop_banner_url));
+      dispatch(setProducts(data.products));
+    } catch (error) {
+      console.error("Error fetching shop details:", error);
+      if (error.response && error.response.status === 401) {
+        // Unauthorized error, alert the user and redirect to login page
+        alert("Authentication token failed. Please log in again.");
+        navigate("/user/login");
+      }
+    }
   };
 
   //Function to toggle show less and show more in shop description
@@ -99,7 +119,7 @@ export default function ShopScreen() {
 
   useEffect(() => {
     console.log("Fetching Data");
-    getShopDetails();
+    getShopDetails(params.shop_id);
   }, []);
 
   return (
@@ -205,97 +225,9 @@ export default function ShopScreen() {
           </h1>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <Product/>
-          <Product/>
-          <Product/>
-          <Product/>
-          {/* <Card className="bg-light-blue-50">
-              <CardHeader className="pb-4">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <CardTitle>
-                      <h3 className="font-medium text-lg text-light-blue-700">Product 1</h3>
-                    </CardTitle>
-                    <CardDescription>
-                      <p className="text-sm text-light-blue-500">Shop Name</p>
-                    </CardDescription>
-                  </div>
-                  <Button className="self-start text-light-blue-700" variant="outline">
-                    View
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <img
-                  alt="Product 1 image"
-                  className="w-full h-64 object-cover"
-                  height="200"
-                  src="/placeholder.svg"
-                  style={{
-                    aspectRatio: "200/200",
-                    objectFit: "cover",
-                  }}
-                  width="200"
-                />
-              </CardContent>
-            </Card>
-            <Card className="bg-light-blue-50">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-light-blue-700">Product 2</CardTitle>
-                <CardDescription className="text-light-blue-500">Product 2 Description</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <img
-                  alt="Product 2 image"
-                  className="w-full h-64 object-cover"
-                  height="200"
-                  src="/placeholder.svg"
-                  style={{
-                    aspectRatio: "200/200",
-                    objectFit: "cover",
-                  }}
-                  width="200"
-                />
-              </CardContent>
-            </Card>
-            <Card className="bg-light-blue-50">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-light-blue-700">Product 3</CardTitle>
-                <CardDescription className="text-light-blue-500">Product 3 Description</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <img
-                  alt="Product 3 image"
-                  className="w-full h-64 object-cover"
-                  height="200"
-                  src="/placeholder.svg"
-                  style={{
-                    aspectRatio: "200/200",
-                    objectFit: "cover",
-                  }}
-                  width="200"
-                />
-              </CardContent>
-            </Card>
-            <Card className="bg-light-blue-50">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-light-blue-700">Product 4</CardTitle>
-                <CardDescription className="text-light-blue-500">Product 4 Description</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <img
-                  alt="Product 4 image"
-                  className="w-full h-64 object-cover"
-                  height="200"
-                  src="/placeholder.svg"
-                  style={{
-                    aspectRatio: "200/200",
-                    objectFit: "cover",
-                  }}
-                  width="200"
-                />
-              </CardContent>
-            </Card> */}
+          {
+            products.map((product) => (<Product product={product} shopLogo={logo} shopName={shopName} shopId={shopId} />))
+          }
         </div>
       </main>
     </div>
