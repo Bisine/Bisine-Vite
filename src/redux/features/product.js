@@ -1,19 +1,32 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { toast } from "react-hot-toast";
+import axiosInstance from "../../Helper/axiosInstance";
+
+const initialState = {
+  productData: [],
+};
+
+export const getProductDetails = createAsyncThunk("/product/get", async (id) => {
+  try {
+    const res = axiosInstance.get(`/product/${id}`);
+
+    toast.promise(res, {
+      loading: "Loading Product data...",
+      success: "Product Data loaded successfully",
+      error: "Failed to get Product",
+    });
+
+    const response = await res;
+
+    return response.data.product;
+  } catch (error) {
+    toast.error(error?.response?.data?.message);
+  }
+});
 
 export const product = createSlice({
   name: "product",
-  initialState: {
-    name: "",
-    description: "",
-    productTags: [],
-    images: [],
-    variants: [
-      { name: "", price: "", quantityInStock: null, weight: null, weightUnit: "kg" },
-    ],
-    weight: 0,
-    unit: "",
-    quantity: null,
-  },
+  initialState,
   reducers: {
     setName: (state, action) => {
       state.name = action.payload;
@@ -39,6 +52,13 @@ export const product = createSlice({
     setQuantity: (state, action) => {
       state.quantity = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getProductDetails.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.productData = [...action.payload];
+      }
+    });
   },
 });
 

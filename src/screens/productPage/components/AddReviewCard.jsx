@@ -1,29 +1,32 @@
 import React, { useState } from 'react';
 import StarRatings from 'react-star-ratings';
+import { useId } from 'react';
 
-function AddReviewCard({ addReview }) {
+function AddReviewCard({addNewReview,product_id}) {
+    
+    const id = useId();
+    
     const [rating, setRating] = useState(0);
-
-    const changeRating = (newRating, name) => {
-        setRating(newRating);
-    };
-
     const [name, setName] = useState('');
     const [review, setReview] = useState('');
     const [selectedOption, setSelectedOption] = useState('Option 1');
-
-
+    
+    const changeRating = (newRating) => {
+        setRating(newRating);
+    };
+    
     const createReviewCard = (e) => {
         e.preventDefault();
         if (name && review && rating && selectedOption) {
             const newReview = {
-                name: name,
-                rating: rating,
+                id: id,
+                user_id: 3,
+                product_id: product_id,
+                rating: parseFloat(rating),
                 description: review,
-                option: selectedOption,
                 date: getCurrentDateFormatted(),
             };
-            addReview(newReview);
+            addNewReview(newReview);
             setName('');
             setReview('');
             setRating(0);
@@ -42,26 +45,8 @@ function AddReviewCard({ addReview }) {
             const month = months[currentDate.getMonth()];
             const year = currentDate.getFullYear();
         
-            const daySuffix = getDaySuffix(day);
-        
-            return `${month} ${day}${daySuffix}, ${year}`;
+            return `${year}-${day}-${month}`;
         }
-        
-        function getDaySuffix(day) {
-            if (day >= 11 && day <= 13) {
-                return 'th';
-            }
-                switch (day % 10) {
-                case 1:
-                    return 'st';
-                case 2:
-                    return 'nd';
-                case 3:
-                    return 'rd';
-                default:
-                    return 'th';
-            }
-    }
 
     return (
         <div className="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
@@ -110,6 +95,7 @@ function AddReviewCard({ addReview }) {
                             numberOfStars={5}
                             starSelectingHoverColor="#ffe234"
                             name='rating'
+                            starDimension="30px"
                         />
                     </div>
                     <button
