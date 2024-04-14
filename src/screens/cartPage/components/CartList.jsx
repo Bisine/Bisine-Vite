@@ -1,7 +1,20 @@
 import React from 'react';
 import Product from './Product';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { setProductIdVarList } from '../../../redux/features/checkout';
 
-const Cart = ({ cart, total, onIncrement, onDecrement, onRemove }) => {
+const Cart = ({ cart, total,  }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate()
+  const handleBuyNow = () => {
+    let temp = [];
+    cart.forEach(e => {
+      temp.push({productId:e.product_id,variantName: e.variant_name})
+    })
+    dispatch(setProductIdVarList(temp))
+    navigate("/checkout");
+  }
   return (
     <div className="flex flex-col sm:gap-20 md:flex-row text-black">
       <div className="md:w-2/3">
@@ -10,9 +23,6 @@ const Cart = ({ cart, total, onIncrement, onDecrement, onRemove }) => {
           <Product
             key={product.id}
             product={product}
-            onIncrement={onIncrement}
-            onDecrement={onDecrement}
-            onRemove={onRemove}
           />
         ))}
       </div>
@@ -21,9 +31,9 @@ const Cart = ({ cart, total, onIncrement, onDecrement, onRemove }) => {
           <h2 className="text-xl font-semibold mb-4">Cart Summary</h2>
           <div className="flex justify-between items-center mb-4">
             <span className="text-gray-600">Total:</span>
-            <span className="text-lg font-semibold">${total.toFixed(2)}</span>
+            <span className="text-lg font-semibold">${total}</span>
           </div>
-          <button className="bg-blue-500 w-full text-white px-4 py-2 rounded-md hover:bg-blue-600">
+          <button onClick={() => handleBuyNow()} className="bg-blue-500 w-full text-white px-4 py-2 rounded-md hover:bg-blue-600">
             Proceed to Buy
           </button>
         </div>

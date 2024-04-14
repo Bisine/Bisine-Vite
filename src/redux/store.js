@@ -4,6 +4,9 @@ import shop from "./features/shop";
 import shopError from "./features/shopError";
 import cart from "./features/cart";
 import product from "./features/product";
+import checkout from "./features/checkout";
+import review from "./features/review";
+import order from "./features/orderedItems"
 
 export const store = configureStore({
     reducer: {
@@ -11,6 +14,9 @@ export const store = configureStore({
         shop: shop,
         shopError: shopError,
         cart: cart,
-        product : product
+        product : product,
+        checkout: checkout,
+        review: review,
+        orderedItems: order
     }
 })

@@ -149,7 +149,8 @@ const ShopCreate = () => {
         social_media_link: socialMediaLink,
         shop_logo_url: logo,
         shop_banner_url: banner,
-        owner_email: localStorage.getItem("email"),
+        owner_email: emailID,
+        owner_id : JSON.parse(localStorage.getItem("user")).id
       };
 
       try {

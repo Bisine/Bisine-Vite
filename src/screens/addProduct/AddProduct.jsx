@@ -14,6 +14,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const ProductAdditionScreen = () => {
   const [showDescriptionTooltip, setDescriptionShowTooltip] = useState(false);
@@ -123,7 +124,7 @@ const ProductAdditionScreen = () => {
       const res_url = await uploadImage(tempImages[i].file)
       imageUrls.push(res_url);
     }
-    const shop_id = localStorage.getItem("shop_id");
+    const shop_id = JSON.parse(localStorage.getItem("shop")).shopId;
 
     const request_data = {
       product_name: productName,
@@ -138,6 +139,7 @@ const ProductAdditionScreen = () => {
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/product/create`,request_data);
       if (response.status == 201) {
         //Product is sucessfully added, need to naviaate to Inventory
+        toast.success("Product successfully added")
         navigate("/");
       }
     } catch (error) {

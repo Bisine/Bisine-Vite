@@ -1,7 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-const imagUrl =
-  "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1999&q=80";
 
 const Product = ({ product, shopName, shopLogo, shopId }) => {
   const navigate = useNavigate();
@@ -9,13 +7,17 @@ const Product = ({ product, shopName, shopLogo, shopId }) => {
   const navigateToShop = (shop_id) => {
     navigate(`/${shopId}`);
   };
+
+  const navigateToProduct = () =>{
+      navigate(`/product/${product.product_id}`)
+  }
   return (
-    <div className="max-w-xs overflow-hidden mx-auto rounded-lg bg-blue-100 shadow-lg">
-      <div className="relative ">
-        <img
+    <div className="w-full overflow-hidden mx-auto rounded-lg bg-blue-100 shadow-lg">
+      <div className="relative w-full">
+        <img onClick={()=> navigateToProduct()}
           src={product.product_image_urls[0]}
           alt={product.product_name}
-          className="w-full h-auto "
+          className="w-full max-h-52 object-cover "
         />
         <p className="absolute bottom-2 text-white right-2 bg-gray-700 text-sm px-1 py-0.5 rounded-md">
           ₹ {product.variants[0].price}
@@ -41,7 +43,7 @@ const Product = ({ product, shopName, shopLogo, shopId }) => {
         </div>
       </div>
       <div className="flex w-full justify-end pb-2 pr-2">
-        <button className="text-black font-semibold text-md rounded-lg px-4 py-1 bg-cyan-400">
+        <button onClick={()=>navigateToProduct()} className="text-black font-semibold text-md rounded-lg px-4 py-1 bg-cyan-400">
           View
         </button>
       </div>

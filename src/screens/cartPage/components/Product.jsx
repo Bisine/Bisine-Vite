@@ -1,67 +1,53 @@
 import React from "react";
+import toast from "react-hot-toast";
+import axiosInstance from "../../../Helper/axiosInstance";
+const Product = ({ product,  }) => {
+  const {  product_name, price, image, shop_logo_url,shop_name,variant_name, cart_item_id } = product;
+  
+  const handleRemoveItem = async () => {
+    if (localStorage.getItem("user")) {
+      axiosInstance
+        .delete(`/cart/${cart_item_id}`)
+        .then((response) => {
+          if (response.status === 200) {
+            toast.success(response.data.message)
+            location.reload()
+          }
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message);
 
-const Product = ({ product, onIncrement, onDecrement, onRemove }) => {
-  const { id, title, price, quantity, image } = product;
+          // Handle the error here (e.g., display an error message)
+        });
+    } else {
+      toast.error("Kindly login to see cart");
+      navigate("/user/login");
+    }
+  }
 
   return (
     <div className="flex items-center border-b border-gray-500 py-4 text-black cursor-pointer">
       <img
         src={image}
-        alt={title}
+        alt={product_name}
         className="sm:w-24 sm:h-24 w-16 h-16 rounded-lg object-cover mr-4"
       />
       <div className="flex-1">
-        <h3 className="sm:text-lg text-sm font-semibold ">{title}</h3>
-        <p className="text-gray-600 sm:text-md text-xs">Price: ${price.toFixed(2)}</p>
-        <div className="flex items-center mt-2">
-          <button
-            onClick={() => onDecrement(id)}
-            className="bg-blue-500 rounded-md sm:rounded-lg  sm:px-1.5 px-1 py-1 sm:py-1.5"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-4 h-4"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M19.5 12h-15"
-              />
-            </svg>
-          </button>
-          <span className="mx-2 text-xs">{quantity}</span>
-          <button
-            onClick={() => onIncrement(id)}
-            className="bg-blue-500 rounded-md sm:rounded-lg  sm:px-1.5 px-1 py-1 sm:py-1.5"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-4 h-4"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 4.5v15m7.5-7.5h-15"
-              />
-            </svg>
-          </button>
+        <h3 className="sm:text-lg text-sm font-semibold ">{product_name}</h3>
+        <div className="flex gap-2 my-2">
+          <img src={shop_logo_url} className="h-5 w-5 rounded-full"/>
+          <h1>{shop_name}</h1>
         </div>
+        <p className="text-gray-600 sm:text-md text-sm">{variant_name}</p>
+        
       </div>
       <div className="text-right">
         <p className="text-lg font-semibold">
-          ${(price * quantity).toFixed(2)}
+          ${(price )}
         </p>
         <button
-          onClick={() => onRemove(id)}
-          className="text-red-500 font-semibold mt-2 hover:underline"
+          onClick={() =>{handleRemoveItem()}}
+          className="text-white bg-red-500 px-2 rounded py-1 font-semibold mt-2 hover:underline"
         >
           Remove
         </button>

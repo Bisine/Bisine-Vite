@@ -32,10 +32,13 @@ const LoginButton = () => {
       .post(`${import.meta.env.VITE_API_URL}/user/auth`, { email: re.email })
       .then((res) => {
         setIsLoading(false);
-        if (res.status == 200) {
-          const { user, access_token } = res.data;
+        if (res.status == 200) 
+        {
+          console.log(res.data)
+          const { user, access_token,shop } = res.data;
           // You can handle the response accordingly, such as storing user details or token in local storage
           localStorage.setItem("user", JSON.stringify(user));
+          localStorage.setItem("shop",JSON.stringify(shop))
           localStorage.setItem("access_token", access_token);
           navigate("/");
         }

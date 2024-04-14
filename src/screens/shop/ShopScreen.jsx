@@ -91,6 +91,7 @@ export default function ShopScreen() {
       dispatch(setLogo(data.shop_logo_url));
       dispatch(setBanner(data.shop_banner_url));
       dispatch(setProducts(data.products));
+      console.log(data)
     } catch (error) {
       console.error("Error fetching shop details:", error);
       if (error.response && error.response.status === 401) {

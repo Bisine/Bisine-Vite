@@ -53,7 +53,9 @@ const ProfileCreation = () => {
       }).then((res) => {
         setIsLoading(false);
         if (res.status == 201) {
-          const {access_token} = res.data;
+          const {access_token,user,shop} = res.data;
+          localStorage.setItem("shop",JSON.stringify(shop))
+          localStorage.setItem("user", JSON.stringify(user));
           localStorage.setItem("access_token",access_token);
           navigate("/");
         }

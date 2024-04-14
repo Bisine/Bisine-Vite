@@ -23,7 +23,7 @@ function ReviewCard({userImage, name, date, description, rating, option}) {
                     <div>
                         <h3 className="font-bold text-lg">{name}</h3>
                         <span className="text-gray-500 block">{date}</span>
-                        <span className='text-gray-500'>Option: {option}</span>
+                        
                     </div>
                 </div>
 
@@ -33,6 +33,7 @@ function ReviewCard({userImage, name, date, description, rating, option}) {
                             starRatedColor="#ffa534"
                             isSelectable={false}
                             numberOfStars={5}
+                            starDimension='20'
                             name='rating'
                         />
                 </div>
